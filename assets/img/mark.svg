@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 44" fill="none">
+  <!-- terminal-prompt glyph:  >..  -->
+  <polyline points="12,7 35,22 12,37" stroke="#D7FF00" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="57" cy="30" r="5.6" fill="#D7FF00"/>
+  <circle cx="78" cy="30" r="5.6" fill="#D7FF00"/>
+</svg>

@@ -1,0 +1,523 @@
+<meta charset="utf-8">
+<title>13-Week Cash Flow — Forward Deployed CPA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A live, interactive 13-week cash flow forecast (synthetic data) from Forward Deployed CPA — pick any week and refresh the direct-method forecast, with transaction-level drill-down.">
+<link rel="canonical" href="https://forwarddeployedcpa.com/builds/cash-flow-13-week.html">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/img/avatar.svg">
+<meta name="theme-color" content="#6D28D9">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Forward Deployed CPA">
+<meta property="og:title" content="13-Week Cash Flow — a live forecast">
+<meta property="og:description" content="Pick any week and refresh the direct-method cash forecast. Actuals vs forecast, scenarios, transaction-level drill-down. Synthetic data.">
+<meta property="og:url" content="https://forwarddeployedcpa.com/builds/cash-flow-13-week.html">
+<meta property="og:image" content="https://forwarddeployedcpa.com/assets/img/og-cashflow.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="13-Week Cash Flow — a live forecast">
+<meta name="twitter:description" content="Pick any week and refresh the direct-method cash forecast. Built on synthetic data.">
+<meta name="twitter:image" content="https://forwarddeployedcpa.com/assets/img/og-cashflow.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b1140; --page:#2a1163; --surface:#1b1440; --surface-2:#241b4d;
+  --text-1:#F5F4F7; --text-2:#c3bfd0; --muted:#8a8698;
+  --grid:#34265f; --axis:#473879; --hairline:rgba(255,255,255,.10);
+  --brand:#9085e9; --brand-strong:#b3a8ff; --brand-soft:#241d38; --brand-glow:#a99cff;
+  --brass:#D7FF00;
+  --good:#3fbf3f; --warning:#f0b429; --critical:#ef6a6a;
+  --s1:#5b9bff; --s2:#2fd39a; --s3:#f0b429; --s4:#35c35a; --s5:#9085e9; --s6:#ef6a6a;
+  --shadow:0 24px 60px -40px rgba(0,0,0,.85);
+  --radius:14px;
+  --f-head:"Archivo","Arial Black",sans-serif;
+  --f-body:"Space Grotesk",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+:root[data-theme="light"]{--ink:#1b1140;--page:#2a1163;--surface:#1b1440;--surface-2:#241b4d;--text-1:#F5F4F7;--text-2:#c3bfd0;--muted:#8a8698;--grid:#34265f;--axis:#473879;--hairline:rgba(255,255,255,.10);--brand:#9085e9;--brand-strong:#b3a8ff;--brand-soft:#241d38;--brand-glow:#a99cff;--brass:#D7FF00;--good:#3fbf3f;--warning:#f0b429;--critical:#ef6a6a;--s1:#5b9bff;--s2:#2fd39a;--s3:#f0b429;--s5:#9085e9;--shadow:0 24px 60px -40px rgba(0,0,0,.85)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:radial-gradient(1100px 600px at 82% -8%,#8B5CF6,transparent 55%),radial-gradient(820px 520px at 0% 100%,#4C1D95,transparent 55%),#6D28D9;background-attachment:fixed;color:var(--text-1);font-family:var(--f-body);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px}
+.topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--page) 82%,transparent);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--hairline)}
+.topbar .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:650;letter-spacing:-.01em}
+.brand small{display:block;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:.02em;margin-top:1px}
+.divider{width:1px;height:26px;background:var(--hairline)}
+.dash-title{font-weight:600;font-size:15px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--brass);background:color-mix(in srgb,var(--brass) 14%,transparent);padding:4px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--brass) 30%,transparent)}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--brass)}
+.spacer{flex:1}
+.iconbtn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border:1px solid var(--hairline);background:var(--surface);color:var(--text-2);border-radius:9px;font:inherit;font-size:13px;font-weight:550;cursor:pointer}
+.iconbtn:hover{color:var(--text-1);border-color:var(--axis)}
+.iconbtn svg{width:15px;height:15px}
+.subhead{padding:26px 0 6px}
+.crumb{font-size:12.5px;color:var(--muted);font-weight:550;margin-bottom:10px}
+.crumb a{color:var(--brand);text-decoration:none}
+.subhead h1{margin:0;font-size:27px;letter-spacing:-.02em;font-weight:700}
+.subhead p{margin:8px 0 0;color:var(--text-2);max-width:74ch}
+
+/* filters */
+.filters{display:flex;flex-wrap:wrap;gap:18px 20px;align-items:flex-end;margin:20px 0 20px;padding:16px 18px;background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius);box-shadow:var(--shadow)}
+.fgrp{display:flex;flex-direction:column;gap:7px}
+.fgrp .lab{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+.asof{flex:1;min-width:340px}
+.asofhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.asofval{font-family:var(--f-mono);font-weight:700;font-size:15px;color:var(--brand)}
+.asofval span{color:var(--text-2);font-weight:500}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:5px;background:linear-gradient(90deg,var(--brand) var(--pct,34%),var(--surface-2) var(--pct,34%));border:1px solid var(--hairline);cursor:pointer;margin:6px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--surface);border:3px solid var(--brand);box-shadow:var(--shadow);cursor:grab}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--surface);border:3px solid var(--brand);cursor:grab}
+.ticks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);font-family:var(--f-mono);margin-top:2px}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--hairline);border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--text-2);font:inherit;font-size:13px;font-weight:550;padding:6px 13px;border-radius:7px;cursor:pointer;transition:.15s}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--text-1);box-shadow:var(--shadow)}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:550;color:var(--text-2);cursor:pointer;user-select:none}
+.chk input{accent-color:var(--brand);width:16px;height:16px}
+
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius);padding:15px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi .lab{font-size:12px;color:var(--text-2);font-weight:550}
+.kpi .val{font-size:23px;font-weight:700;letter-spacing:-.02em;margin-top:7px;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.kpi .delta{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;margin-top:8px}
+.kpi .delta.up{color:var(--good)} .kpi .delta.down{color:var(--critical)} .kpi .delta.warn{color:var(--warning)}
+.kpi .spark{position:absolute;right:12px;bottom:10px;width:70px;height:28px;opacity:.9}
+.kpi.attn{border-color:color-mix(in srgb,var(--critical) 45%,var(--hairline))}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius);padding:16px 18px 12px;box-shadow:var(--shadow)}
+.card.span2{grid-column:1 / -1}
+.card h3{margin:0;font-size:14.5px;font-weight:650}
+.card .sub{font-size:12px;color:var(--muted);margin-top:3px}
+.cardhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--text-2);margin-top:2px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.legend i.line{height:3px;border-radius:2px;width:16px}
+.legend i.dash{height:0;width:16px;border-top:2px dashed currentColor;border-radius:0}
+svg{display:block;width:100%;overflow:visible}
+.axislab{font-size:10.5px;fill:var(--muted);font-family:var(--f-mono)}
+.gridline{stroke:var(--grid);stroke-width:1}.baseline{stroke:var(--axis);stroke-width:1}
+
+/* grid table */
+.tablewrap{overflow-x:auto}
+table{border-collapse:separate;border-spacing:0;font-size:12.5px;min-width:900px;width:100%}
+th,td{text-align:right;padding:7px 10px;border-bottom:1px solid var(--hairline);white-space:nowrap}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);font-weight:600;background:var(--surface);position:sticky;top:0;z-index:1}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface);z-index:2;min-width:170px;box-shadow:1px 0 0 var(--hairline)}
+th:first-child{z-index:3}
+th.fc{color:var(--brand)} th.act{color:var(--muted);font-style:normal}
+td.mono{font-variant-numeric:tabular-nums}
+tr.section td:first-child{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;padding-top:11px}
+tr.sub td{font-weight:700;border-top:1px solid var(--axis);background:color-mix(in srgb,var(--brand) 4%,var(--surface))}
+tr.sub td:first-child{background:color-mix(in srgb,var(--brand) 4%,var(--surface))}
+tr.end td{font-weight:800;border-top:2px solid var(--axis);border-bottom:2px solid var(--axis);background:color-mix(in srgb,var(--brand) 9%,var(--surface))}
+tr.end td:first-child{background:color-mix(in srgb,var(--brand) 9%,var(--surface))}
+tr.muted td{color:var(--text-2)}
+td.item{cursor:pointer}
+td.item:first-child::after{content:"›";color:var(--muted);margin-left:7px;opacity:.6}
+tr.drillrow:hover td{background:var(--surface-2)}
+tr.drillrow:hover td:first-child{background:var(--surface-2)}
+td.breach{color:var(--critical);font-weight:700}
+.fccol{background:color-mix(in srgb,var(--brand) 2.5%,transparent)}
+.wkdate{display:block;font-size:9.5px;color:var(--muted);font-weight:500;letter-spacing:0}
+
+/* drill panel */
+.drill{margin-top:16px;background:var(--surface);border:1px solid color-mix(in srgb,var(--brand) 30%,var(--hairline));border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:none}
+.drill.on{display:block}
+.drill .dh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:var(--brand-soft);border-bottom:1px solid var(--hairline)}
+.drill .dh h4{margin:0;font-size:14px;font-weight:700}
+.drill .dh .meta{font-size:12px;color:var(--text-2);font-family:var(--f-mono);margin-top:2px}
+.drill .dclose{border:1px solid var(--hairline);background:var(--surface);color:var(--text-2);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:16px;line-height:1}
+.drill .dbody{padding:6px 0}
+.drill table{min-width:520px}
+.drill td,.drill th{border-bottom:1px solid var(--hairline)}
+.pill{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;border:1px solid transparent}
+.pill.cur{color:var(--good);background:color-mix(in srgb,var(--good) 12%,transparent);border-color:color-mix(in srgb,var(--good) 26%,transparent)}
+.pill.d30{color:var(--warning);background:color-mix(in srgb,var(--warning) 13%,transparent);border-color:color-mix(in srgb,var(--warning) 30%,transparent)}
+.pill.d60{color:var(--critical);background:color-mix(in srgb,var(--critical) 12%,transparent);border-color:color-mix(in srgb,var(--critical) 28%,transparent)}
+
+.tt{position:fixed;pointer-events:none;z-index:60;background:var(--ink);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:9px 11px;font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;transform:translateY(3px);transition:opacity .12s;max-width:240px}
+.tt.on{opacity:1;transform:none}
+.tt .h{font-weight:650;margin-bottom:5px}
+.tt .r{display:flex;justify-content:space-between;gap:16px;font-family:var(--f-mono)}
+.tt .r span:first-child{color:rgba(255,255,255,.7)}
+footer{margin:30px 0 44px;padding-top:18px;border-top:1px solid var(--hairline);color:var(--muted);font-size:12.5px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+footer a{color:var(--brand);text-decoration:none;font-weight:600}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.kpi:last-child{grid-column:span 2}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
+</style>
+
+<div class="topbar"><div class="wrap">
+  <a class="brand" href="index.html" style="gap:9px">
+    <img src="../assets/img/mark.svg" alt="" style="height:22px;width:auto">
+    <span style="font-family:var(--f-head);text-transform:uppercase;letter-spacing:-.02em;font-size:16px;line-height:1">Forward Deployed <span style="color:var(--brass)">CPA</span></span>
+  </a>
+  <div class="divider"></div>
+  <div class="dash-title">13-Week Cash Flow</div>
+  <div class="badge"><span class="dot"></span>Illustrative · Synthetic data</div>
+  <div class="spacer"></div>
+</div></div>
+
+<div class="wrap">
+  <div class="subhead">
+    <div class="crumb"><a href="index.html">❮ Forward Deployed CPA · Builds</a> &nbsp;/&nbsp; 13-week cash flow</div>
+    <h1>13-week cash flow — forecast as of any week</h1>
+    <p>A direct-method rolling forecast for a ~$15M B2B company. Slide the as-of week and the whole model re-derives: opening cash from actuals, the 13-week projection from collection patterns and the payment calendar, and — where the weeks have already happened — how the forecast actually played out. Click any line to drill to the underlying customers, vendors, and payroll.</p>
+  </div>
+
+  <div class="filters">
+    <div class="fgrp asof">
+      <div class="asofhead">
+        <span class="lab">Forecast as of week</span>
+        <span class="asofval" id="asofVal">W18 <span>· wk ending May 8</span></span>
+      </div>
+      <input type="range" id="asof" min="1" max="52" value="18" step="1" aria-label="As-of week">
+      <div class="ticks"><span>W1</span><span>W13</span><span>W26</span><span>W39</span><span>W52</span></div>
+    </div>
+    <div class="fgrp">
+      <span class="lab">Scenario</span>
+      <div class="seg" role="group" aria-label="Scenario">
+        <button data-s="down">Downside</button>
+        <button aria-pressed="true" data-s="base">Base</button>
+        <button data-s="up">Upside</button>
+      </div>
+    </div>
+    <div class="fgrp">
+      <span class="lab">Compare</span>
+      <label class="chk"><input type="checkbox" id="overlay" checked> Actual vs forecast</label>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid">
+    <div class="card span2">
+      <div class="cardhead">
+        <div><h3>Ending cash — 13-week projection</h3><div class="sub" id="cashSub">Weekly ending balance vs the $500K minimum operating cash</div></div>
+        <div class="legend">
+          <span><i class="line" style="background:var(--brand)"></i>Forecast cash</span>
+          <span style="color:var(--muted)"><i class="dash"></i>Actual</span>
+          <span><i class="line" style="background:var(--brass)"></i>Min cash</span>
+        </div>
+      </div>
+      <div id="cashChart"></div>
+    </div>
+
+    <div class="card">
+      <div class="cardhead"><div><h3>Receipts by source</h3><div class="sub">13-week window · projected</div></div></div>
+      <div id="recChart"></div>
+    </div>
+    <div class="card">
+      <div class="cardhead"><div><h3>Disbursements by category</h3><div class="sub">13-week window · projected</div></div></div>
+      <div id="disChart"></div>
+    </div>
+
+    <div class="card span2">
+      <div class="cardhead"><div><h3>13-week cash flow forecast</h3><div class="sub" id="gridSub">Direct method · $ in thousands · click any line item to drill down</div></div></div>
+      <div class="tablewrap"><table id="cfTable"><thead><tr id="cfHead"></tr></thead><tbody></tbody></table></div>
+      <div class="drill" id="drill">
+        <div class="dh">
+          <div><h4 id="drillTitle"></h4><div class="meta" id="drillMeta"></div></div>
+          <button class="dclose" id="drillClose" aria-label="Close">×</button>
+        </div>
+        <div class="dbody tablewrap"><table id="drillTable"><thead></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>Illustrative dashboard built on synthetic data — no client information.</span>
+    <span>Built by <a href="index.html">Forward Deployed CPA</a></span>
+  </footer>
+</div>
+
+<div class="tt" id="tt" role="tooltip"></div>
+
+<script>
+"use strict";
+/* ---------- theme ---------- */
+const root=document.documentElement;
+root.setAttribute('data-theme','light');
+setTimeout(drawAll,0);
+function cvar(n){return getComputedStyle(root).getPropertyValue(n).trim()}
+
+/* ---------- calendar ---------- */
+const BASE=new Date(2026,0,9);                       // week 1 ending (fixed, deterministic)
+function wd(w){return new Date(BASE.getTime()+(w-1)*7*864e5)}
+function wkShort(w){const d=wd(w);return (d.getMonth()+1)+'/'+d.getDate()}
+function wkLong(w){return wd(w).toLocaleDateString('en-US',{month:'short',day:'numeric'})}
+
+/* ---------- model (synthetic, deterministic) — $ in thousands ---------- */
+const NW=64, CASH0=1800, MIN_CASH=500, REV_LIMIT=2000, REV_DRAWN=600, AVAIL=REV_LIMIT-REV_DRAWN;
+const rng=s=>{const x=Math.sin(s*97.13+41.7)*43758.5453;return x-Math.floor(x);};
+const seas=w=>1+0.07*Math.sin((w/52)*Math.PI*2+0.6);
+const CAPEX={8:40,21:55,34:30,47:45,60:35};
+// scheduled + operating "plan" (forecast basis) per week
+function plan(w){
+  return {
+    coll:  285*seas(w) + (w%4===2?95:0),
+    other: 4,
+    payroll: (w%2===0?205:0),
+    vendor: 120*seas(w),
+    rent:  (w%4===1?32:0),
+    debt:  (w%4===2?28:0),
+    tax:   (w%4===3?22:0) + (w%13===0?60:0),
+    capex: (CAPEX[w]||0),
+    distrib:(w%13===0?150:0),
+  };
+}
+// actuals = plan with realized variance on operating items only (scheduled items are known)
+function actual(w){
+  const p=plan(w);
+  return {...p,
+    coll:  p.coll  *(1+0.14*(rng(w*3+1)-0.5)*2),
+    other: p.other *(1+0.20*(rng(w*3+2)-0.5)*2),
+    vendor:p.vendor*(1+0.10*(rng(w*5+3)-0.5)*2),
+  };
+}
+const RCAT=[['coll','Collections','--s2'],['other','Other income','--s1']];
+const DCAT=[['payroll','Payroll & benefits','--s5'],['vendor','Vendor payments','--s1'],['rent','Rent & facilities','--s3'],['debt','Debt service','--brass'],['tax','Taxes','--s6'],['capex','Capital expenditures','--s4'],['distrib','Owner distributions','--muted']];
+const rec=o=>o.coll+o.other;
+const dis=o=>o.payroll+o.vendor+o.rent+o.debt+o.tax+o.capex+o.distrib;
+// precompute actual weekly + chained ending cash
+const ACT=[null], ACTEND=[CASH0];
+for(let w=1;w<=NW;w++){const a=actual(w);ACT.push(a);ACTEND.push(ACTEND[w-1]+rec(a)-dis(a));}
+const SCEN={base:{coll:1,other:1,vendor:1},down:{coll:0.88,other:0.90,vendor:0.97},up:{coll:1.07,other:1.05,vendor:1.02}};
+
+const state={asOf:18, scen:'base', overlay:true, drill:null};
+
+function computeView(){
+  const A=state.asOf, m=SCEN[state.scen];
+  const wks=[]; for(let o=0;o<13;o++) wks.push(A+o);
+  const open=ACTEND[A-1];
+  // forecast components + chained cash for each window week
+  let beg=open;
+  const F=wks.map((w,o)=>{
+    const p=plan(w);
+    const f={...p, coll:p.coll*m.coll, other:p.other*m.other, vendor:p.vendor*m.vendor};
+    const r=rec(f), d=dis(f), net=r-d, begin=beg, end=beg+net; beg=end;
+    return {w,o,f,r,d,net,begin,end};
+  });
+  const actEndW=wks.map(w=>ACTEND[w]);           // true actual ending for those weeks
+  const low=Math.min(...F.map(x=>x.end)), lowIdx=F.findIndex(x=>x.end===low);
+  const endWk13=F[12].end, net13=endWk13-open;
+  const varWk13=actEndW[12]-endWk13;
+  // category sums over window (forecast)
+  const recSum=RCAT.map(([k,l,c])=>({k,l,c,v:F.reduce((t,x)=>t+x.f[k],0)}));
+  const disSum=DCAT.map(([k,l,c])=>({k,l,c,v:F.reduce((t,x)=>t+x.f[k],0)}));
+  return {A,wks,open,F,actEndW,low,lowIdx,endWk13,net13,varWk13,recSum,disSum,
+    fcEndArr:F.map(x=>x.end), sparkOpen:Array.from({length:9},(_,i)=>ACTEND[Math.max(0,A-9+i)])};
+}
+let V=computeView();
+
+/* ---------- helpers ---------- */
+const tt=document.getElementById('tt');
+function showTT(h,x,y){tt.innerHTML=h;tt.classList.add('on');const r=tt.getBoundingClientRect();let nx=x+14,ny=y-r.height-10;if(nx+r.width>innerWidth-8)nx=x-r.width-14;if(ny<8)ny=y+16;tt.style.left=nx+'px';tt.style.top=ny+'px';}
+function hideTT(){tt.classList.remove('on')}
+const SVGNS='http://www.w3.org/2000/svg';
+const el=(n,a)=>{const e=document.createElementNS(SVGNS,n);for(const k in a)e.setAttribute(k,a[k]);return e};
+const money=v=>{const a=Math.abs(v);const s=v<0?'-':'';return a>=1000?s+'$'+(a/1000).toFixed(2)+'M':s+'$'+Math.round(a)+'K'};
+const moneyS=v=>{const a=Math.abs(v);const s=v<0?'-':'';return a>=1000?s+'$'+(a/1000).toFixed(1)+'M':s+'$'+Math.round(a)+'K'};
+const kK=v=>{const r=Math.round(v);return r<0?'('+Math.abs(r).toLocaleString()+')':r.toLocaleString()};
+const pct=v=>(v>=0?'+':'')+v.toFixed(1)+'%';
+function spark(vals,w,h){const mn=Math.min(...vals),mx=Math.max(...vals),sc=v=>h-2-((v-mn)/(mx-mn||1))*(h-4);return vals.map((v,i)=>(i?'L':'M')+((i/(vals.length-1))*w).toFixed(1)+' '+sc(v).toFixed(1)).join(' ')}
+
+/* ---------- KPIs ---------- */
+function kpis(){
+  const box=document.getElementById('kpis');
+  const breach=V.low<MIN_CASH;
+  const items=[
+    {lab:'Opening cash',val:money(V.open),d:'wk ending '+wkLong(V.A-1<1?1:V.A-1),dc:'',spark:V.sparkOpen},
+    {lab:'Projected ending · wk 13',val:money(V.endWk13),d:(V.net13>=0?'+':'')+moneyS(V.net13)+' over 13 wks',dc:V.net13>=0?'up':'down',spark:V.fcEndArr},
+    {lab:'Net 13-week change',val:(V.net13>=0?'+':'')+money(V.net13),d:'receipts − disbursements',dc:V.net13>=0?'up':'down',spark:V.F.map(x=>x.net)},
+    {lab:'Liquidity low point',val:money(V.low),d:'wk ending '+wkLong(V.wks[V.lowIdx])+(breach?' · below min':''),dc:breach?'warn':'up',spark:V.fcEndArr,attn:breach},
+    {lab:'Total liquidity · wk 13',val:money(V.endWk13+AVAIL),d:'incl. '+moneyS(AVAIL)+' revolver',dc:'',spark:V.fcEndArr.map(v=>v+AVAIL)},
+  ];
+  box.innerHTML=items.map(it=>{const col=it.dc==='down'?'var(--critical)':it.dc==='warn'?'var(--warning)':'var(--brand)';
+    return `<div class="kpi ${it.attn?'attn':''}"><div class="lab">${it.lab}</div><div class="val">${it.val}</div>
+      <div class="delta ${it.dc}">${it.dc==='down'?'▼':it.dc==='warn'?'●':it.dc==='up'?'▲':''} ${it.d}</div>
+      <svg class="spark" viewBox="0 0 70 28" preserveAspectRatio="none"><path d="${spark(it.spark,70,28)}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;}).join('');
+}
+
+/* ---------- cash trajectory chart ---------- */
+function drawCash(){
+  const host=document.getElementById('cashChart');host.innerHTML='';
+  const F=V.F, n=13, act=V.actEndW, ov=state.overlay;
+  const W=host.clientWidth||820,H=280,pad={l:52,r:16,t:16,b:30};
+  const iw=W-pad.l-pad.r,ih=H-pad.t-pad.b;
+  const all=F.map(x=>x.end).concat(ov?act:[]).concat([MIN_CASH]);
+  let mx=Math.max(...all)*1.08, mn=Math.min(...all,MIN_CASH)*0.85; if(mn<0)mn=Math.min(...all)*1.1; if(mn>0&&mn>MIN_CASH*0.6)mn=MIN_CASH*0.6;
+  const X=i=>pad.l+(n===1?iw/2:(i/(n-1))*iw), Y=v=>pad.t+ih-((v-mn)/((mx-mn)||1))*ih;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Ending cash projection'});
+  for(let g=0;g<=4;g++){const v=mn+(mx-mn)*g/4,y=Y(v);svg.appendChild(el('line',{x1:pad.l,x2:W-pad.r,y1:y,y2:y,class:g?'gridline':'baseline'}));const t=el('text',{x:pad.l-8,y:y+3,class:'axislab','text-anchor':'end'});t.textContent=moneyS(v);svg.appendChild(t);}
+  F.forEach((x,i)=>{if(i%2===0||i===12){const t=el('text',{x:X(i),y:H-9,class:'axislab','text-anchor':'middle'});t.textContent=wkShort(x.w);svg.appendChild(t);}});
+  const brand=cvar('--brand'),brass=cvar('--brass'),muted=cvar('--muted'),crit=cvar('--critical');
+  // min cash line
+  svg.appendChild(el('line',{x1:pad.l,x2:W-pad.r,y1:Y(MIN_CASH),y2:Y(MIN_CASH),stroke:brass,'stroke-width':1.6,'stroke-dasharray':'5 5','stroke-opacity':.8}));
+  const ml=el('text',{x:W-pad.r,y:Y(MIN_CASH)-6,class:'axislab','text-anchor':'end'});ml.setAttribute('style',`fill:${brass}`);ml.textContent='min '+moneyS(MIN_CASH);svg.appendChild(ml);
+  // forecast area + line
+  const fp=F.map((x,i)=>[X(i),Y(x.end)]);
+  const gid='cg';const defs=el('defs',{});const lg=el('linearGradient',{id:gid,x1:0,y1:0,x2:0,y2:1});
+  lg.appendChild(el('stop',{offset:'0%','stop-color':brand,'stop-opacity':.26}));lg.appendChild(el('stop',{offset:'100%','stop-color':brand,'stop-opacity':.02}));defs.appendChild(lg);svg.appendChild(defs);
+  svg.appendChild(el('path',{d:`M${fp[0][0]} ${Y(mn)} `+fp.map(p=>`L${p[0]} ${p[1]}`).join(' ')+` L${fp[12][0]} ${Y(mn)} Z`,fill:`url(#${gid})`}));
+  svg.appendChild(el('path',{d:fp.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' '),fill:'none',stroke:brand,'stroke-width':2.6,'stroke-linecap':'round','stroke-linejoin':'round'}));
+  // actual overlay
+  if(ov){const ap=act.map((v,i)=>[X(i),Y(v)]);
+    svg.appendChild(el('path',{d:ap.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' '),fill:'none',stroke:muted,'stroke-width':2,'stroke-dasharray':'5 4','stroke-linecap':'round'}));}
+  // points + breach markers
+  F.forEach((x,i)=>{const br=x.end<MIN_CASH;svg.appendChild(el('circle',{cx:X(i),cy:Y(x.end),r:br?4.5:3,fill:br?crit:brand,stroke:cvar('--surface'),'stroke-width':1.6}));});
+  // hover
+  const hit=el('rect',{x:pad.l,y:pad.t,width:iw,height:ih,fill:'transparent'});svg.appendChild(hit);
+  const focus=el('line',{x1:0,x2:0,y1:pad.t,y2:pad.t+ih,stroke:cvar('--axis'),'stroke-width':1,opacity:0});svg.appendChild(focus);
+  hit.addEventListener('mousemove',e=>{const r=svg.getBoundingClientRect();let i=Math.round(((e.clientX-r.left)/r.width*W-pad.l)/iw*(n-1));i=Math.max(0,Math.min(n-1,i));
+    focus.setAttribute('x1',X(i));focus.setAttribute('x2',X(i));focus.setAttribute('opacity',1);
+    const x=F[i], cush=x.end-MIN_CASH, vr=act[i]-x.end;
+    showTT(`<div class="h">Wk ${i+1} · ${wkLong(x.w)}</div>
+      <div class="r"><span style="color:${brand}">Forecast cash</span><b>${money(x.end)}</b></div>
+      ${ov?`<div class="r"><span>Actual cash</span><b>${money(act[i])}</b></div><div class="r"><span>Variance</span><b style="color:${vr>=0?'var(--good)':'var(--critical)'}">${(vr>=0?'+':'')+moneyS(vr)}</b></div>`:''}
+      <div class="r"><span>Cushion vs min</span><b style="color:${cush>=0?'var(--good)':'var(--critical)'}">${(cush>=0?'+':'')+moneyS(cush)}</b></div>`,e.clientX,e.clientY);});
+  hit.addEventListener('mouseleave',()=>{focus.setAttribute('opacity',0);hideTT();});
+  host.appendChild(svg);
+}
+
+/* ---------- horizontal category bars ---------- */
+function hbars(hostId,rows,total){
+  const host=document.getElementById(hostId);host.innerHTML='';
+  const W=host.clientWidth||520,rowH=34,pad={t:8,b:6,l:8,r:14};
+  const H=pad.t+pad.b+rows.length*rowH, labelW=118, barX=labelW, barW=W-labelW-88;
+  const mx=Math.max(...rows.map(r=>r.v))||1;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`});
+  rows.forEach((r,i)=>{const y=pad.t+i*rowH,bh=15,by=y+(rowH-bh)/2-2,col=cvar(r.c);
+    const lab=el('text',{x:pad.l,y:by+bh-3});lab.setAttribute('style','fill:var(--text-2);font-size:12px;font-family:system-ui');lab.textContent=r.l;svg.appendChild(lab);
+    const w=Math.max(2,(r.v/mx)*barW);svg.appendChild(el('rect',{x:barX,y:by,width:w,height:bh,rx:3,fill:col}));
+    const vl=el('text',{x:barX+w+8,y:by+bh-3});vl.setAttribute('style','fill:var(--text-1);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums');vl.textContent=moneyS(r.v);svg.appendChild(vl);
+    const hit=el('rect',{x:0,y,width:W,height:rowH,fill:'transparent'});svg.appendChild(hit);
+    hit.addEventListener('mousemove',e=>showTT(`<div class="h">${r.l}</div><div class="r"><span>13-wk total</span><b>${money(r.v)}</b></div><div class="r"><span>Share</span><b>${Math.round(r.v/total*100)}%</b></div>`,e.clientX,e.clientY));
+    hit.addEventListener('mouseleave',hideTT);
+  });
+  host.appendChild(svg);
+}
+
+/* ---------- the 13-week grid ---------- */
+const ROWS=[
+  {t:'section',l:'Operating receipts'},
+  {t:'item',k:'coll',l:'Collections'},
+  {t:'item',k:'other',l:'Other income'},
+  {t:'sub',l:'Total receipts',fn:x=>x.r},
+  {t:'section',l:'Operating disbursements'},
+  {t:'item',k:'payroll',l:'Payroll & benefits'},
+  {t:'item',k:'vendor',l:'Vendor payments'},
+  {t:'item',k:'rent',l:'Rent & facilities'},
+  {t:'item',k:'debt',l:'Debt service'},
+  {t:'item',k:'tax',l:'Taxes'},
+  {t:'item',k:'capex',l:'Capital expenditures'},
+  {t:'item',k:'distrib',l:'Owner distributions'},
+  {t:'sub',l:'Total disbursements',fn:x=>x.d},
+  {t:'net',l:'Net cash flow',fn:x=>x.net},
+  {t:'begin',l:'Beginning cash',fn:x=>x.begin},
+  {t:'end',l:'Ending cash',fn:x=>x.end},
+  {t:'minref',l:'Minimum operating cash'},
+  {t:'cush',l:'Surplus / (shortfall)',fn:x=>x.end-MIN_CASH},
+];
+function drawGrid(){
+  const head=document.getElementById('cfHead');
+  const tb=document.querySelector('#cfTable tbody');
+  const F=V.F;
+  head.innerHTML='<th>$ in thousands</th>'+F.map(x=>`<th class="fc">Wk ${x.o+1}<span class="wkdate">${wkShort(x.w)}</span></th>`).join('')+'<th>13-wk</th>';
+  const rowsHtml=ROWS.map(r=>{
+    if(r.t==='section') return `<tr class="section"><td>${r.l}</td>${F.map(()=>'<td></td>').join('')}<td></td></tr>`;
+    if(r.t==='minref'){ return `<tr class="muted"><td>${r.l}</td>${F.map(()=>`<td class="mono">${kK(MIN_CASH)}</td>`).join('')}<td class="mono">${kK(MIN_CASH)}</td></tr>`; }
+    let vals, tot, cls='', firstCls='';
+    if(r.t==='item'){ vals=F.map(x=>x.f[r.k]); tot=vals.reduce((a,b)=>a+b,0); cls='drillrow'; firstCls='item'; }
+    else { vals=F.map(r.fn); tot = (r.t==='begin'?F[0].begin : r.t==='end'?F[12].end : vals.reduce((a,b)=>a+b,0)); cls=r.t; }
+    const tds=vals.map((v,i)=>{
+      let c='mono'+(r.t==='end'&&v<MIN_CASH?' breach':'')+(r.t==='cush'&&v<0?' breach':'');
+      return `<td class="${c}">${kK(v)}</td>`;
+    }).join('');
+    const totCls = (r.t==='cush'&&tot<0)?'mono breach':'mono';
+    const attr = r.t==='item'?` data-k="${r.k}"`:'';
+    return `<tr class="${cls}"${attr}><td class="${firstCls}">${r.l}</td>${tds}<td class="${totCls}">${kK(tot)}</td></tr>`;
+  }).join('');
+  tb.innerHTML=rowsHtml;
+  // overlay: actual ending + variance rows
+  if(state.overlay){
+    const actRow=`<tr class="muted"><td>Actual ending cash</td>${V.actEndW.map(v=>`<td class="mono">${kK(v)}</td>`).join('')}<td class="mono">${kK(V.actEndW[12])}</td></tr>`;
+    const varRow=`<tr class="muted"><td>Forecast variance</td>${V.actEndW.map((v,i)=>{const d=v-V.F[i].end;return `<td class="mono" style="color:${d>=0?'var(--good)':'var(--critical)'}">${(d>=0?'+':'')+kK(d)}</td>`;}).join('')}<td class="mono" style="color:${V.varWk13>=0?'var(--good)':'var(--critical)'}">${(V.varWk13>=0?'+':'')+kK(V.varWk13)}</td></tr>`;
+    tb.insertAdjacentHTML('beforeend',actRow+varRow);
+  }
+  // wire drill clicks
+  tb.querySelectorAll('tr.drillrow').forEach(tr=>{
+    tr.querySelectorAll('td').forEach((td,ci)=>{ if(ci===0||ci>13) { if(ci===0) td.addEventListener('click',()=>openDrill(tr.dataset.k,0)); return; }
+      td.style.cursor='pointer';
+      td.addEventListener('click',()=>openDrill(tr.dataset.k,ci-1));
+    });
+  });
+}
+
+/* ---------- drill-down ---------- */
+const CUST=[['Atlas Manufacturing',13],['Beacon Health Partners',11],['Summit Retail Group',10],['Northwind Traders',9],['Ironclad Systems',8],['Vertex Components',7],['Orion Wholesale',7],['Cedar Logistics',6],['Meridian Foods',6],['Harbor Freight Co',5],['Kingsley & Co',5],['Pine State Supply',5],['Delta Print',4],['Crestline Services',4]];
+const VEND=[['Global Materials Inc',15],['SteelSource',11],['FastFreight Carriers',8],['PackRight Supplies',7],['BlueSky Insurance',6],['Metro Utilities',5],['AdVantage Media',5],['TechStack SaaS',4],['Northgate Leasing',4],['CloudHost',3],['OfficeWorks',3],['Apex Legal',3],['GreenClean Facilities',3],['SafeGuard Bonding',2]];
+function distribute(list,total,w){
+  const adj=list.map((c,i)=>[c[0],Math.max(0.02,c[1]*(1+0.55*Math.sin(w*0.37+i*1.1)))]);
+  const sum=adj.reduce((t,x)=>t+x[1],0);
+  let rows=adj.map((x,i)=>({name:x[0],amt:total*x[1]/sum,age:['Current','1–30','31–60'][(i+w)%3],terms:['Net 30','Net 45','Net 15','Net 60'][i%4]}));
+  rows.sort((a,b)=>b.amt-a.amt);
+  const r=Math.round(rows.reduce((t,x)=>t+x.amt,0)); rows[0].amt+=total-r; // absorb rounding
+  return rows;
+}
+function drillData(k,o){
+  const x=V.F[o], w=x.w, T=x.f[k];
+  if(k==='coll') return {cols:['Customer','Aging','Terms','Expected'],rows:distribute(CUST,T,w).map(r=>[r.name,`<span class="pill ${r.age==='Current'?'cur':r.age==='1–30'?'d30':'d60'}">${r.age}</span>`,r.terms,kK(r.amt)]),total:T};
+  if(k==='vendor') return {cols:['Vendor','Status','Terms','Payment'],rows:distribute(VEND,T,w).map(r=>[r.name,`<span class="pill ${r.age==='Current'?'cur':'d30'}">${r.age==='31–60'?'Past due':'Scheduled'}</span>`,r.terms,kK(r.amt)]),total:T};
+  if(k==='payroll'){const parts=[['Gross wages',.72],['Employer payroll taxes',.09],['Benefits & insurance',.12],['401(k) match',.07]];return {cols:['Component','','','Amount'],rows:parts.map(p=>[p[0],'','',kK(T*p[1])]),total:T};}
+  if(k==='rent') return {cols:['Location','','','Amount'],rows:[['HQ lease','','',kK(T*0.68)],['Warehouse / distribution','','',kK(T*0.32)]],total:T};
+  if(k==='debt') return {cols:['Item','','','Amount'],rows:[['Term loan — interest','','',kK(T*0.42)],['Term loan — principal','','',kK(T*0.58)]],total:T};
+  if(k==='tax'){const p=plan(w);const rows=[];if(p.tax){if(w%4===3)rows.push(['Sales & use tax','','',kK(22)]);if(w%13===0)rows.push(['Est. income tax','','',kK(60)]);}rows.push(['Payroll withholding','','',kK(Math.max(0,T-rows.reduce((t,r)=>t+parseFloat(String(r[3]).replace(/[(),]/g,''))||0,0)))]);return {cols:['Tax','','','Amount'],rows,total:T};}
+  if(k==='capex') return {cols:['Project','','','Amount'],rows:[['Equipment / capital project','','',kK(T)]],total:T};
+  if(k==='distrib') return {cols:['Item','','','Amount'],rows:[['Quarterly owner distribution','','',kK(T)]],total:T};
+  return {cols:['Item','','','Amount'],rows:[['Detail','','',kK(T)]],total:T};
+}
+const drillEl=document.getElementById('drill');
+function openDrill(k,o){
+  state.drill={k,o};
+  const label=ROWS.find(r=>r.k===k).l, x=V.F[o], d=drillData(k,o);
+  document.getElementById('drillTitle').textContent=label+' — Wk '+(o+1);
+  document.getElementById('drillMeta').textContent='Week ending '+wkLong(x.w)+' · '+state.scen.charAt(0).toUpperCase()+state.scen.slice(1)+' scenario · total '+money(d.total);
+  const dt=document.getElementById('drillTable');
+  dt.querySelector('thead').innerHTML='<tr>'+d.cols.map((c,i)=>`<th style="${i===0?'text-align:left':''}">${c}</th>`).join('')+'</tr>';
+  dt.querySelector('tbody').innerHTML=d.rows.map(r=>'<tr>'+r.map((c,i)=>`<td class="${i===d.cols.length-1?'mono':''}" style="${i===0?'text-align:left;font-weight:600':i>0&&i<d.cols.length-1?'text-align:left;color:var(--text-2)':''}">${c}</td>`).join('')+'</tr>').join('')
+    +`<tr class="sub"><td>Total ${label.toLowerCase()}</td>${d.cols.slice(1,-1).map(()=>'<td></td>').join('')}<td class="mono">${kK(d.total)}</td></tr>`;
+  drillEl.classList.add('on');
+  drillEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+document.getElementById('drillClose').onclick=()=>{drillEl.classList.remove('on');state.drill=null;};
+
+/* ---------- filters ---------- */
+const asof=document.getElementById('asof');
+function setAsofLabel(){document.getElementById('asofVal').innerHTML='W'+state.asOf+' <span>· wk ending '+wkLong(state.asOf)+'</span>';asof.style.setProperty('--pct',((state.asOf-1)/51*100)+'%');}
+asof.addEventListener('input',()=>{state.asOf=+asof.value;setAsofLabel();if(state.drill&&state.drill.o>12){state.drill=null;drillEl.classList.remove('on');}refresh(true);});
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');state.scen=b.dataset.s;refresh();}));
+document.getElementById('overlay').addEventListener('change',e=>{state.overlay=e.target.checked;refresh();});
+
+function refresh(keepDrill){
+  V=computeView();
+  drawAll();
+  if(keepDrill&&state.drill){openDrill(state.drill.k,state.drill.o);}
+}
+function drawAll(){
+  kpis();drawCash();
+  hbars('recChart',V.recSum,V.recSum.reduce((t,r)=>t+r.v,0));
+  hbars('disChart',V.disSum,V.disSum.reduce((t,r)=>t+r.v,0));
+  drawGrid();
+  const gs=document.getElementById('cashSub'); if(gs) gs.textContent='Weekly ending balance vs the '+moneyS(MIN_CASH)+' minimum · forecast as of wk ending '+wkLong(state.asOf);
+}
+setAsofLabel();refresh();
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawAll,150)});
+</script>

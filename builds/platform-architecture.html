@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Finance AI Platform — Forward Deployed CPA</title>
+<meta name="description" content="The reference architecture for deploying finance AI at scale: certified Power BI semantic models as the single source of truth, AI-built dashboards on Azure Static Web Apps, secured end-to-end by Entra ID.">
+<link rel="canonical" href="https://forwarddeployedcpa.com/builds/platform-architecture.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Forward Deployed CPA">
+<meta property="og:title" content="The Finance AI Platform — reference architecture">
+<meta property="og:description" content="Live data in. Tools you built out. How finance teams ship AI dashboards on governed data, secured end-to-end.">
+<meta property="og:url" content="https://forwarddeployedcpa.com/builds/platform-architecture.html">
+<meta property="og:image" content="https://forwarddeployedcpa.com/assets/img/platform-architecture-wide.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@fwddeployedcpa">
+<meta name="theme-color" content="#6D28D9">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css?v=2">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap site-head__row">
+    <a class="brand" href="../index.html" aria-label="Forward Deployed CPA home">
+      <img class="brand__mark" src="../assets/img/mark.svg" alt=""><span class="brand__wm"><span class="brand__word">Forward Deployed</span><span class="brand__cpa">CPA</span></span>
+    </a>
+    <button class="nav-toggle" aria-label="Open menu" aria-controls="nav" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="../index.html">Home</a>
+      <a href="index.html" aria-current="page">Builds</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="phead">
+  <div class="wrap">
+    <p class="mono"><a href="index.html" class="muted" style="text-decoration:none">❮ back to builds</a></p>
+    <span class="eyebrow" style="margin-top:.8rem">builds · the platform</span>
+    <h1 style="text-transform:none;letter-spacing:-.025em;margin-top:.7rem;">Live data in.<br>Tools you built <span class="lime">out.</span></h1>
+    <p class="lead">The reference architecture for deploying finance AI at scale — so a finance team builds its own dashboards and tools with AI, on governed data, secured end to end.</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="wrap">
+    <figure class="arch-figure reveal">
+      <img src="../assets/img/platform-architecture.png" alt="Forward Deployed CPA finance AI platform architecture: AI-built dashboards and tools on Azure Static Web Apps, sitting on a repository of certified Power BI semantic models fed by scheduled, reconciled data from source systems, all secured by Entra ID.">
+    </figure>
+    <div class="arch-actions reveal">
+      <a class="btn btn--lime" href="../assets/img/platform-architecture.png" target="_blank" rel="noopener">Open full-size <span class="arw" aria-hidden="true">❯</span></a>
+      <a class="btn btn--ghost" href="cash-flow-13-week.html">See a tool built on it</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="wrap" style="max-width:880px">
+    <div class="sec-head reveal">
+      <div>
+        <span class="eyebrow">how to read it</span>
+        <h2 style="margin-top:.6rem;text-transform:none;letter-spacing:-.02em">Four layers, top to bottom</h2>
+      </div>
+    </div>
+    <div class="layer-list reveal">
+      <div class="layer">
+        <span class="layer__tag">// delivery</span>
+        <div>
+          <h3>Dashboards &amp; AI tools — built by finance</h3>
+          <p>End users build their own solutions with AI in Python and HTML, and deploy them securely on Azure Static Web Apps. No engineering backlog. Each tool shows a person only what they're authorized to see.</p>
+        </div>
+      </div>
+      <div class="layer">
+        <span class="layer__tag">// source of truth</span>
+        <div>
+          <h3>A repository of certified semantic models</h3>
+          <p>One certified Power BI model per reporting domain. Every metric is defined once — so every dashboard and AI tool inherits the same numbers and the same access rules.</p>
+        </div>
+      </div>
+      <div class="layer">
+        <span class="layer__tag">// source systems</span>
+        <div>
+          <h3>Scheduled, reconciled data feeds</h3>
+          <p>GL, ERP and subledgers, consolidation, payroll/HRIS, and the cloud warehouse land clean, reconciled data on a schedule — the trusted base everything above is built on.</p>
+        </div>
+      </div>
+      <div class="layer">
+        <span class="layer__tag">// identity</span>
+        <div>
+          <h3>Entra ID — one identity, end to end</h3>
+          <p>Azure Static Web Apps behind Entra ID. One identity governs who sees what, everywhere — secure by architecture, not by policy memo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <a class="brand" href="../index.html" aria-label="Forward Deployed CPA home">
+        <img class="brand__mark" src="../assets/img/mark.svg" alt=""><span class="brand__wm"><span class="brand__word">Forward Deployed</span><span class="brand__cpa">CPA</span></span>
+      </a>
+      <div class="foot-links">
+        <a href="../index.html">Home</a>
+        <a href="index.html">Builds</a>
+        <a href="https://www.linkedin.com/company/forward-deployed-cpa" rel="me">LinkedIn</a>
+        <a href="https://x.com/fwddeployedcpa" rel="me">X</a>
+        <a href="mailto:sander@forwarddeployedcpa.com" style="text-transform:none">sander@forwarddeployedcpa.com</a>
+        <a href="https://hundred-spires.com">Hundred Spires</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span data-year>2026</span> Forward Deployed CPA · Atlanta, GA</span>
+      <span>Accounting, shipped where the work happens.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js?v=2" defer></script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance AI Maturity Assessment — Forward Deployed CPA</title>
+<meta name="description" content="A free, interactive self-assessment: score your finance team's AI maturity across 10 dimensions and watch the radar update live. Nothing is saved — start fresh anytime.">
+<link rel="canonical" href="https://forwarddeployedcpa.com/tools/ai-maturity-assessment.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Forward Deployed CPA">
+<meta property="og:title" content="Finance AI Maturity Assessment">
+<meta property="og:description" content="Score your finance team's AI maturity across 10 dimensions and watch the radar update live.">
+<meta property="og:url" content="https://forwarddeployedcpa.com/tools/ai-maturity-assessment.html">
+<meta property="og:image" content="https://forwarddeployedcpa.com/assets/img/og-banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@fwddeployedcpa">
+<meta name="theme-color" content="#111014">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@900&family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --grape:#6D28D9; --grape-soft:#7C3AED; --grape-line:#9085e9;
+    --lime:#D7FF00; --ink:#111014; --ink-800:#17161c; --ink-700:#1e1c26;
+    --line:#302d3b; --paper:#F5F4F7; --mute:#9c98ab; --mute-dim:#6f6b7e;
+    --series-c:#9085e9; --series-c-wash:rgba(124,58,237,.16);
+    --series-t:#D7FF00; --series-t-wash:rgba(215,255,0,.08);
+    --grid:#2a2833; --card:#17161c;
+    --f-head:"Archivo","Arial Black",sans-serif;
+    --f-body:"Space Grotesk",system-ui,sans-serif;
+    --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+    --shadow:0 24px 60px -40px rgba(0,0,0,.9);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--f-body); color:var(--paper); font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 600px at 80% -10%, #8B5CF6, transparent 55%),
+      radial-gradient(800px 520px at 0% 100%, #4C1D95, transparent 55%),
+      #6D28D9;
+    background-attachment:fixed; }
+  body::before { content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:linear-gradient(to right,rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:44px 44px; }
+  a { color:var(--lime); }
+
+  /* header */
+  header.app {
+    position:relative; z-index:2;
+    background:rgba(37,16,90,.82); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    padding:16px 30px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  header.app .mark { display:flex; align-items:center; gap:.55rem; font-family:var(--f-head); font-weight:900; text-transform:uppercase; letter-spacing:-.02em; font-size:1rem; color:#fff; text-decoration:none; }
+  header.app .mark img { height:24px; }
+  header.app .mark .cpa { color:var(--lime); }
+  header.app .brand { padding-left:16px; border-left:1px solid var(--line); display:flex; flex-direction:column; }
+  header.app h1 { font-family:var(--f-head); font-weight:900; text-transform:uppercase; letter-spacing:-.01em; font-size:19px; line-height:1; }
+  header.app .sub { color:var(--mute); font-family:var(--f-mono); font-size:11.5px; margin-top:5px; letter-spacing:.02em; }
+  header.app .spacer { flex:1; }
+  .btn {
+    font:inherit; font-family:var(--f-mono); font-size:12px; font-weight:500; letter-spacing:.03em;
+    padding:8px 14px; border-radius:8px; border:1px solid var(--line);
+    background:var(--ink-700); color:var(--paper); cursor:pointer; transition:all .15s;
+    text-transform:uppercase;
+  }
+  .btn:hover { border-color:var(--grape-soft); background:rgba(124,58,237,.14); }
+  .btn.small { padding:5px 10px; font-size:11px; }
+  .btn.lime { background:var(--lime); color:var(--ink); border-color:var(--lime); font-weight:500; }
+  .btn.lime:hover { filter:brightness(1.05); background:var(--lime); }
+
+  /* intro strip */
+  .intro { position:relative; z-index:1; max-width:1420px; margin:0 auto; padding:22px 30px 4px; }
+  .intro .eyebrow { font-family:var(--f-mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.18em; color:var(--lime); display:inline-flex; gap:.5em; }
+  .intro .eyebrow::before { content:"❯"; color:var(--grape-line); }
+  .intro p { color:#c9c5d6; max-width:70ch; margin-top:10px; font-size:14.5px; }
+  .intro .reset-note { font-family:var(--f-mono); font-size:11.5px; color:var(--mute-dim); margin-top:8px; }
+
+  .layout { position:relative; z-index:1;
+    display:grid; grid-template-columns:minmax(420px,1fr) minmax(460px,600px);
+    grid-template-areas:"left right"; gap:24px; padding:18px 30px 40px; max-width:1420px; margin:0 auto; align-items:start; }
+  #assess { grid-area:left; }
+  .results { grid-area:right; position:sticky; top:16px; }
+  @media (max-width:1040px){ .layout{ grid-template-columns:1fr; grid-template-areas:"right" "left"; } .results{ position:static; } }
+
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; margin-bottom:16px; overflow:hidden; box-shadow:var(--shadow); }
+  .p-head { padding:11px 16px; font-family:var(--f-mono); font-size:12px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--mute);
+    border-bottom:1px solid var(--line); background:rgba(255,255,255,.015); display:flex; align-items:center; gap:8px; }
+  .p-head::before { content:"//"; color:var(--grape-line); }
+  .p-body { padding:16px; }
+
+  .tiles { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .tile .lab { font-family:var(--f-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--mute-dim); }
+  .tile .val { font-family:var(--f-head); font-weight:900; font-size:30px; letter-spacing:-.03em; margin-top:3px; line-height:1; }
+  .tile .val.phase { font-size:16px; font-family:var(--f-body); font-weight:700; padding-top:9px; text-transform:none; letter-spacing:0; }
+  .tile .note { font-family:var(--f-mono); font-size:10.5px; color:var(--mute-dim); margin-top:4px; }
+  #curAvg,#tgtAvg { color:var(--paper); }
+  #gapAvg { color:var(--lime); }
+
+  /* dimension cards */
+  .dim-card { background:var(--card); border:1px solid var(--line); border-radius:12px; margin-bottom:12px; overflow:hidden; }
+  .dim-head { display:flex; align-items:center; gap:12px; padding:12px 16px; cursor:pointer; user-select:none; background:rgba(255,255,255,.015); transition:background .15s; }
+  .dim-head:hover { background:rgba(124,58,237,.1); }
+  .dim-num { width:24px; height:24px; border-radius:7px; background:var(--grape); color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--f-mono); font-size:12px; font-weight:500; flex-shrink:0; }
+  .dim-title { font-weight:700; font-size:15px; }
+  .dim-sub { color:var(--mute); font-size:12px; }
+  .dim-status { margin-left:auto; display:flex; gap:12px; align-items:center; font-family:var(--f-mono); font-size:12.5px; flex-shrink:0; }
+  .pill { display:inline-flex; align-items:center; gap:5px; color:var(--paper); }
+  .keydot { width:9px; height:9px; border-radius:50%; display:inline-block; flex-shrink:0; }
+  .kd-c { background:var(--series-c); } .kd-t { background:var(--series-t); }
+  .chev { color:var(--mute-dim); font-size:11px; transition:transform .15s; }
+  .dim-card.open .chev { transform:rotate(90deg); }
+  .dim-body { display:none; }
+  .dim-card.open .dim-body { display:block; }
+
+  .lvl-grid { width:100%; border-collapse:collapse; }
+  .lvl-grid th { font-family:var(--f-mono); font-size:10.5px; font-weight:500; color:var(--mute-dim); text-transform:uppercase; letter-spacing:.05em; padding:12px 8px 8px 0; text-align:left; }
+  .lvl-grid th:first-child { padding-left:16px; }
+  .lvl-grid th.rcol { text-align:center; width:56px; padding-left:0; }
+  .lvl-grid td { padding:11px 8px; border-top:1px solid var(--line); vertical-align:top; }
+  .lvl-grid td:first-child { padding-left:16px; }
+  .lvl-grid td.rcol { text-align:center; vertical-align:middle; padding-left:0; }
+  .lvl-name { font-weight:650; font-size:13px; display:flex; align-items:center; gap:8px; }
+  .lvl-name .ln { display:inline-flex; width:19px; height:19px; border-radius:5px; align-items:center; justify-content:center; background:var(--ink-700); border:1px solid var(--line); color:var(--mute); font-family:var(--f-mono); font-weight:500; font-size:11px; flex-shrink:0; }
+  .lvl-desc { color:var(--mute); font-size:12.5px; margin-top:4px; }
+  .radio { width:20px; height:20px; border-radius:50%; border:2px solid var(--mute-dim); background:transparent; cursor:pointer; display:inline-block; position:relative; transition:all .12s; }
+  .radio:hover { border-color:var(--paper); }
+  .radio.sel-c { border-color:var(--series-c); background:var(--series-c); box-shadow:inset 0 0 0 3px var(--card); }
+  .radio.sel-t { border-color:var(--series-t); background:var(--series-t); box-shadow:inset 0 0 0 3px var(--card); }
+
+  /* radar */
+  #radarwrap { position:relative; }
+  #radar { width:100%; height:auto; display:block; }
+  .legend { display:flex; gap:18px; margin-bottom:8px; font-family:var(--f-mono); font-size:12px; color:var(--mute); flex-wrap:wrap; }
+  .legend .key { display:flex; align-items:center; gap:7px; }
+  .keyline { width:16px; height:3px; display:inline-block; border-radius:2px; }
+  #tooltip { position:absolute; pointer-events:none; display:none; background:var(--ink-700); border:1px solid var(--line); border-radius:8px; padding:8px 11px; font-size:12px; box-shadow:0 6px 20px rgba(0,0,0,.5); z-index:5; max-width:250px; }
+  #tooltip .tt-dim { font-weight:700; margin-bottom:3px; }
+  #tooltip .tt-row { color:var(--mute); display:flex; gap:6px; align-items:center; }
+
+  .gap-row { display:flex; align-items:center; gap:12px; padding:8px 0; border-top:1px solid var(--line); font-size:13px; }
+  .gap-row:first-of-type { border-top:none; }
+  .gap-row .g-name { flex:1; }
+  .gap-row .g-meter { flex:1.1; height:8px; background:var(--ink-700); border-radius:4px; overflow:hidden; position:relative; border:1px solid var(--line); }
+  .gap-row .g-fill { position:absolute; left:0; top:0; bottom:0; background:var(--series-c); border-radius:4px 0 0 4px; }
+  .gap-row .g-tgt { position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--series-t); }
+  .gap-row .g-val { width:96px; text-align:right; color:var(--mute); font-family:var(--f-mono); font-size:12px; }
+
+  .hint { font-size:12.5px; color:var(--mute-dim); line-height:1.55; }
+  .about { font-size:12.5px; color:var(--mute); line-height:1.6; }
+  .about b { color:var(--paper); font-weight:700; }
+
+  footer.app { position:relative; z-index:1; border-top:1px solid var(--line); background:var(--ink-800); padding:20px 30px; max-width:100%; }
+  footer.app .in { max-width:1420px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  footer.app .mark { display:flex; align-items:center; gap:.5rem; font-family:var(--f-head); font-weight:900; text-transform:uppercase; letter-spacing:-.02em; font-size:.95rem; color:#fff; text-decoration:none; }
+  footer.app .mark img { height:16px; } footer.app .mark .cpa { color:var(--lime); }
+  footer.app a { font-family:var(--f-mono); font-size:12px; }
+  footer.app .discl { font-family:var(--f-mono); font-size:11px; color:var(--mute-dim); flex-basis:100%; }
+  :focus-visible { outline:2px solid var(--lime); outline-offset:2px; border-radius:4px; }
+
+  /* ================= PRINT / PDF ================= */
+  .print-only { display:none; }
+  @media print {
+    @page { margin:14mm 12mm; }
+    html, body { background:#fff !important; color:#151221 !important; }
+    body::before { display:none !important; }
+    header.app, .intro, #assess, footer.app, .legend, #tooltip, .btn { display:none !important; }
+    .layout { display:block !important; padding:0 !important; max-width:100% !important; margin:0 !important; }
+    .results { position:static !important; }
+    .print-only { display:block !important; }
+
+    .print-head {
+      display:flex !important; align-items:center; gap:14px;
+      background:#6D28D9 !important; color:#fff;
+      border-bottom:4px solid #D7FF00;
+      padding:14px 18px; border-radius:10px 10px 0 0; margin-bottom:16px;
+      -webkit-print-color-adjust:exact; print-color-adjust:exact; break-inside:avoid;
+    }
+    .print-head img { height:24px; }
+    .print-head h1 { font-family:var(--f-head); font-size:17px; text-transform:uppercase; letter-spacing:-.01em; margin:0; color:#fff; }
+    .print-head .pd { font-family:var(--f-mono); font-size:11px; color:rgba(255,255,255,.82); margin-top:3px; }
+    .print-head .spacer { flex:1; }
+    .print-head .wm { font-family:var(--f-head); text-transform:uppercase; font-size:13px; letter-spacing:-.01em; }
+    .print-head .cpa { color:#D7FF00; }
+
+    .panel { background:#fff !important; border:1px solid #e2dcf2 !important; box-shadow:none !important; break-inside:avoid; margin-bottom:12px; }
+    .p-head { background:#f2eeff !important; color:#4C1D95 !important; border-bottom:1px solid #D7FF00 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .p-head::before { color:#7C3AED !important; }
+    .tile .lab, .tile .note { color:#6b6577 !important; }
+    #curAvg, #tgtAvg { color:#4C1D95 !important; }
+    #gapAvg { color:#151221 !important; background:#D7FF00; border-radius:5px; padding:0 .28em; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .tile .phase { color:#151221 !important; }
+
+    #panel-radar .p-body { background:#6D28D9 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    #radarwrap { --grid:rgba(255,255,255,.34); --series-c:#ffffff; --series-c-wash:rgba(255,255,255,.16); --series-t:#D7FF00; --series-t-wash:rgba(215,255,0,.20); --paper:#ffffff; --mute-dim:rgba(255,255,255,.72); --card:#6D28D9; }
+
+    .gap-row .g-name { color:#151221 !important; }
+    .gap-row .g-meter { background:#eee !important; border-color:#ccc !important; }
+    .gap-row .g-fill { background:#6D28D9 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .gap-row .g-tgt { background:#151221 !important; }
+    .gap-row .g-val { color:#555 !important; }
+    .about { color:#333 !important; } .about b { color:#151221 !important; }
+
+    #printDims h2 { font-family:var(--f-head); font-size:15px; text-transform:uppercase; letter-spacing:-.01em; color:#4C1D95; margin:4px 0 8px; }
+    table.pd { width:100%; border-collapse:collapse; font-size:12px; }
+    table.pd thead { display:table-header-group; }
+    table.pd th { text-align:left; background:#6D28D9 !important; color:#fff !important; padding:7px 9px; font-family:var(--f-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    table.pd th.n, table.pd th.t, table.pd th.g { text-align:center; width:78px; }
+    table.pd td { padding:7px 9px; border-bottom:1px solid #e9e4f5; }
+    table.pd td.n, table.pd td.t, table.pd td.g { text-align:center; }
+    table.pd tr { break-inside:avoid; }
+    table.pd td.n { color:#6D28D9; font-weight:600; }
+    table.pd td.t { color:#151221; font-weight:600; }
+    table.pd td.g { font-family:var(--f-mono); }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-head print-only">
+  <img src="../assets/img/mark.svg" alt="">
+  <div>
+    <h1>Finance AI Maturity Assessment</h1>
+    <div class="pd" id="printDate"></div>
+  </div>
+  <span class="spacer"></span>
+  <span class="wm">Forward Deployed <span class="cpa">CPA</span></span>
+</div>
+
+<header class="app">
+  <a class="mark" href="../index.html" aria-label="Forward Deployed CPA">
+    <img src="../assets/img/mark.svg" alt=""><span>Forward Deployed <span class="cpa">CPA</span></span>
+  </a>
+  <div class="brand">
+    <h1>Finance AI Maturity Assessment</h1>
+    <span class="sub">10 dimensions · 5 phases · rate now vs. target</span>
+  </div>
+  <span class="spacer"></span>
+  <button class="btn small" id="expandBtn">Expand all</button>
+  <button class="btn small" id="printBtn">PDF</button>
+  <button class="btn lime small" id="resetBtn">Reset</button>
+</header>
+
+<div class="intro">
+  <span class="eyebrow">self-assessment</span>
+  <p>For each of the ten dimensions, mark <b style="color:var(--series-c)">where your finance team is now</b> and <b style="color:var(--lime)">where you want to be</b>. The radar, scorecard, and gap ranking update live as you go.</p>
+  <p class="reset-note">❯ Nothing is saved or sent anywhere — it runs entirely in your browser and resets every time you open or refresh the page.</p>
+</div>
+
+<div class="layout">
+
+  <div class="results">
+    <div class="panel">
+      <div class="p-head">Scorecard</div>
+      <div class="p-body">
+        <div class="tiles">
+          <div class="tile"><div class="lab">Current avg</div><div class="val" id="curAvg">—</div><div class="note" id="curRated">unrated</div></div>
+          <div class="tile"><div class="lab">Target avg</div><div class="val" id="tgtAvg">—</div><div class="note">&nbsp;</div></div>
+          <div class="tile"><div class="lab">Gap</div><div class="val" id="gapAvg">—</div><div class="note">target − current</div></div>
+          <div class="tile"><div class="lab">Overall phase</div><div class="val phase" id="phase">—</div><div class="note">&nbsp;</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="p-head">Maturity radar</div>
+      <div class="p-body">
+        <div class="legend">
+          <span class="key"><span class="keyline" style="background:var(--series-c)"></span>Current</span>
+          <span class="key"><span class="keyline" style="background:var(--series-t)"></span>Target</span>
+        </div>
+        <div id="radarwrap">
+          <svg id="radar" viewBox="0 0 560 500" role="img" aria-label="Radar chart of AI maturity by dimension"></svg>
+          <div id="tooltip"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="p-head">Largest gaps to target</div>
+      <div class="p-body"><div id="gapList"></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="p-head">About this model</div>
+      <div class="p-body">
+        <div class="about">
+          This assessment synthesizes published finance AI-maturity frameworks — <b>Gartner</b>'s Finance AI
+          Maturity Model, the <b>FP&amp;A Trends Group</b>'s Stages of AI Maturity in Finance, <b>Databricks</b>'
+          AI Governance Maturity Model, and public AI-readiness scorecards — into <b>ten finance-specific
+          dimensions</b>, each rated on a common five-phase scale:
+          <b>Exploring → Experimenting → Adopting → Scaling → Transforming</b>. It's a conversation starter and a
+          planning aid, not a certification.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="assess"></div>
+</div>
+
+<div id="printDims" class="print-only"></div>
+
+<footer class="app">
+  <div class="in">
+    <a class="mark" href="../index.html"><img src="../assets/img/mark.svg" alt=""><span>Forward Deployed <span class="cpa">CPA</span></span></a>
+    <a href="https://forwarddeployedcpa.com">forwarddeployedcpa.com</a>
+    <span class="discl">No inputs are stored or transmitted — everything runs in your browser.</span>
+  </div>
+</footer>
+
+<script>
+const PHASES = ["Exploring","Experimenting","Adopting","Scaling","Transforming"];
+
+const DIMS = [
+{ name:"Leadership & Strategy", short:"Leadership", sub:"Sponsorship, roadmap, funding", levels:[
+  "AI is not on the leadership agenda — no sponsor, no budget, no stated direction.",
+  "An executive sponsor exists and experimentation is encouraged, but there is no roadmap or dedicated funding.",
+  "A written AI roadmap for finance exists with prioritized initiatives, a named owner, and allocated budget.",
+  "AI objectives are embedded in department goals; leadership reviews progress on a set cadence and removes blockers.",
+  "AI is core to finance strategy with multi-year investment; finance is cited as the enterprise model for adoption."]},
+{ name:"Culture & Adoption", short:"Culture", sub:"Breadth and depth of everyday use", levels:[
+  "Most of the team has not touched AI tools; skepticism or fear is common.",
+  "A handful of early adopters experiment; most use is casual chat Q&A with copy-paste output.",
+  "A majority use AI weekly for real work; champions exist in each sub-team and wins are shared openly.",
+  "AI-first is the default instinct — people ask \"can AI do this?\" before working manually; peer teaching is routine.",
+  "Adoption is universal and self-sustaining; the team invents and shares new practices without central push."]},
+{ name:"Skills & Literacy", short:"Skills", sub:"Training and capability depth", levels:[
+  "No training offered; skills limited to basic chat prompts, if any.",
+  "Ad hoc lunch-and-learns; a few individuals self-teach prompting basics.",
+  "Structured curriculum by role; most staff prompt effectively, use projects/context, and validate outputs.",
+  "Power users build reusable assets — skills, prompt libraries, automations; skill paths are tracked.",
+  "Team members design agentic workflows and tools for others; finance exports training to other departments."]},
+{ name:"Use Case Portfolio", short:"Use cases", sub:"Inventory, prioritization, coverage", levels:[
+  "No inventory of use cases; usage is invisible to management.",
+  "Informal idea list; a few individual use cases (meeting notes, decks) with no prioritization.",
+  "A prioritized backlog mapped to business value; several production use cases in core processes.",
+  "Portfolio actively managed with stage gates; use cases span close, reporting, FP&A, and audit.",
+  "Portfolio drives measurable strategic outcomes; new use cases sourced systematically from the whole team."]},
+{ name:"Data Readiness", short:"Data", sub:"Structure, quality, accessibility", levels:[
+  "Data scattered across spreadsheets and email; inconsistent structures force heavy manual cleanup.",
+  "Key data sets identified; some standardization, but AI work still needs ad hoc extracts and cleanup.",
+  "Core financial data is structured, documented, and accessible — clean TB, consistent CoA, defined sources of truth.",
+  "Governed pipelines feed AI workflows; data quality is monitored and definitions are maintained.",
+  "Data products designed for AI consumption — near-real-time, reconciled, trusted enterprise-wide."]},
+{ name:"Tools & Technology", short:"Tools", sub:"Platform, hosting, data connections, interactivity", levels:[
+  "No sanctioned AI tools; any usage runs through personal accounts; nothing can be shared.",
+  "Enterprise chat tool licensed, but limited to the chat window and file uploads. AI-built deliverables have no place to be hosted or shared — outputs circulate as static copies, and users cannot interact with them.",
+  "A governed platform hosts AI-built tools where team members can access and run them; tools connect to work context — projects, shared knowledge, connectors to key systems; templates and skills in use.",
+  "Hosted tools connect to live source data (ERP, EPM, BI) via governed APIs and accept user inputs — parameters, file submission, controlled write-back; automations run scheduled and event-driven.",
+  "The platform is self-serve for the whole team; agentic systems execute multi-step workflows across systems with monitoring; custom tools built where differentiated."]},
+{ name:"Process Integration", short:"Process", sub:"AI embedded in how work runs", levels:[
+  "AI plays no role in documented finance processes.",
+  "Individuals use AI on process steps informally; results are pasted back by hand.",
+  "AI steps formally embedded in select processes — close tasks, recs, variance commentary — with defined handoffs.",
+  "Processes redesigned around AI; cycle times materially reduced; manual steps eliminated rather than assisted.",
+  "End-to-end processes run with AI as the operating layer; humans handle exceptions and judgment calls."]},
+{ name:"Governance & Risk", short:"Governance", sub:"Policy, controls, compliance", levels:[
+  "No policy; shadow usage; no view of what data goes into AI tools.",
+  "Basic acceptable-use policy exists; awareness is uneven; no review process for new uses.",
+  "Clear policy, data classification rules, and an approved tool list; defined review path for new use cases.",
+  "Risk-tiered controls; audit trail for AI-assisted outputs in controlled processes; periodic compliance checks.",
+  "Governance is automated and adaptive; AI controls integrated with the internal-control framework; agent inventory maintained."]},
+{ name:"Output Quality & Trust", short:"Quality", sub:"Validation and reliability of outputs", levels:[
+  "Outputs used unverified — or distrusted and discarded; no standards either way.",
+  "Individuals spot-check informally; quality varies by person.",
+  "Verification norms defined for material outputs: source citation, tie-outs, reviewer sign-off.",
+  "Validation built into workflows — programmatic tie-outs, reconciliation checks, dual review on controlled outputs.",
+  "Quality metrics tracked; error rates known and low; trusted for board-level and external-facing work."]},
+{ name:"Value Measurement", short:"Value", sub:"Baselines, KPIs, ROI", levels:[
+  "No measurement; benefits are anecdotal.",
+  "Occasional time-saved anecdotes collected; no baseline.",
+  "Baselines and KPIs defined — hours saved, cycle time, error rates — and tracked for major use cases.",
+  "Value reported to the CFO on a cadence; ROI drives portfolio priorities and tool spend.",
+  "AI value embedded in the finance scorecard; measurable P&L and working-capital impact attributed."]}
+];
+
+/* fresh, blank state on every load — nothing persisted */
+let state = { current: Array(10).fill(0), target: Array(10).fill(0) };
+
+const assess = document.getElementById("assess");
+function buildAssess(){
+  assess.innerHTML = "";
+  DIMS.forEach((d,i)=>{
+    const card = document.createElement("div");
+    card.className = "dim-card" + (i===0 ? " open" : "");
+    card.innerHTML = `
+      <div class="dim-head" data-i="${i}">
+        <span class="dim-num">${i+1}</span>
+        <span><span class="dim-title">${d.name}</span><br><span class="dim-sub">${d.sub}</span></span>
+        <span class="dim-status">
+          <span class="pill"><span class="keydot kd-c"></span><span id="st-c-${i}">—</span></span>
+          <span class="pill"><span class="keydot kd-t"></span><span id="st-t-${i}">—</span></span>
+          <span class="chev">▶</span>
+        </span>
+      </div>
+      <div class="dim-body">
+        <table class="lvl-grid">
+          <tr><th>Maturity phase</th><th class="rcol">Now</th><th class="rcol">Target</th></tr>
+          ${d.levels.map((desc,li)=>`
+            <tr>
+              <td><span class="lvl-name"><span class="ln">${li+1}</span>${PHASES[li]}</span>
+                  <div class="lvl-desc">${desc}</div></td>
+              <td class="rcol"><span class="radio" data-kind="current" data-i="${i}" data-l="${li+1}" role="radio" tabindex="0" aria-label="${d.name} — current level ${li+1}: ${PHASES[li]}"></span></td>
+              <td class="rcol"><span class="radio" data-kind="target" data-i="${i}" data-l="${li+1}" role="radio" tabindex="0" aria-label="${d.name} — target level ${li+1}: ${PHASES[li]}"></span></td>
+            </tr>`).join("")}
+        </table>
+      </div>`;
+    assess.appendChild(card);
+  });
+  assess.querySelectorAll(".dim-head").forEach(h=>{
+    h.addEventListener("click",()=> h.parentElement.classList.toggle("open"));
+  });
+  assess.querySelectorAll(".radio").forEach(r=>{
+    const set = ()=>{
+      const {kind,i,l} = r.dataset;
+      state[kind][+i] = state[kind][+i] === +l ? 0 : +l;
+      render();
+    };
+    r.addEventListener("click", set);
+    r.addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); set(); }});
+  });
+}
+
+/* ---------- radar ---------- */
+const svg = document.getElementById("radar");
+const CX=280, CY=252, R=182, N=DIMS.length, MAX=5;
+const angle = i => -Math.PI/2 + i * 2*Math.PI/N;
+const pt = (i,v) => [CX + Math.cos(angle(i))*R*v/MAX, CY + Math.sin(angle(i))*R*v/MAX];
+function ringPath(v){ return DIMS.map((_,i)=>pt(i,v)).map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ")+" Z"; }
+function seriesPath(arr){ return arr.map((v,i)=>pt(i,v)).map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ")+" Z"; }
+function drawRadar(){
+  let s = "";
+  for(let v=1; v<=MAX; v++) s += `<path d="${ringPath(v)}" fill="none" stroke="var(--grid)" stroke-width="1"/>`;
+  for(let i=0;i<N;i++){ const [x,y]=pt(i,MAX);
+    s += `<line x1="${CX}" y1="${CY}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--grid)" stroke-width="1"/>`; }
+  const midA = -Math.PI/2 + Math.PI/N;
+  for(let v=1; v<=MAX; v++){ const x = CX + Math.cos(midA)*R*v/MAX, y = CY + Math.sin(midA)*R*v/MAX;
+    s += `<text x="${(x+3).toFixed(1)}" y="${(y-3).toFixed(1)}" font-size="9.5" fill="var(--mute-dim)" font-family="var(--f-mono)">${v}</text>`; }
+  DIMS.forEach((d,i)=>{
+    const a = angle(i), lx = CX + Math.cos(a)*(R+22), ly = CY + Math.sin(a)*(R+22);
+    const anchor = Math.abs(Math.cos(a))<0.25 ? "middle" : (Math.cos(a)>0 ? "start":"end");
+    const dy = Math.sin(a) > 0.6 ? 10 : (Math.sin(a) < -0.6 ? -2 : 4);
+    s += `<text x="${lx.toFixed(1)}" y="${(ly+dy).toFixed(1)}" text-anchor="${anchor}" font-size="12" font-weight="700" fill="var(--paper)">${d.short}</text>
+          <text x="${lx.toFixed(1)}" y="${(ly+dy+14).toFixed(1)}" text-anchor="${anchor}" font-size="10.5" fill="var(--mute-dim)" font-family="var(--f-mono)" id="axv-${i}"></text>`;
+  });
+  s += `<g id="g-target"></g><g id="g-current"></g><g id="g-hits"></g>`;
+  svg.innerHTML = s;
+}
+function renderSeries(){
+  const gT = svg.querySelector("#g-target"), gC = svg.querySelector("#g-current"), gH = svg.querySelector("#g-hits");
+  const t = state.target, c = state.current;
+  gT.innerHTML = t.some(v=>v>0) ?
+    `<path d="${seriesPath(t)}" fill="var(--series-t-wash)" stroke="var(--series-t)" stroke-width="2" stroke-linejoin="round"/>` +
+    t.map((v,i)=>{ if(!v) return ""; const [x,y]=pt(i,v);
+      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="var(--series-t)" stroke="var(--card)" stroke-width="2"/>`; }).join("") : "";
+  gC.innerHTML = c.some(v=>v>0) ?
+    `<path d="${seriesPath(c)}" fill="var(--series-c-wash)" stroke="var(--series-c)" stroke-width="2" stroke-linejoin="round"/>` +
+    c.map((v,i)=>{ if(!v) return ""; const [x,y]=pt(i,v);
+      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="var(--series-c)" stroke="var(--card)" stroke-width="2"/>`; }).join("") : "";
+  gH.innerHTML = DIMS.map((d,i)=>{ const [x,y]=pt(i, Math.max(c[i], t[i], 2.4));
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="16" fill="transparent" data-i="${i}" style="cursor:default"/>`; }).join("");
+  DIMS.forEach((d,i)=>{ const el = svg.querySelector(`#axv-${i}`); if(el) el.textContent = (c[i]||"–") + " → " + (t[i]||"–"); });
+  gH.querySelectorAll("circle").forEach(h=>{
+    h.addEventListener("mousemove", e=>showTip(e, +h.dataset.i));
+    h.addEventListener("mouseleave", hideTip);
+  });
+}
+const tip = document.getElementById("tooltip");
+function showTip(e,i){
+  const d = DIMS[i], c = state.current[i], t = state.target[i];
+  tip.innerHTML = `<div class="tt-dim">${d.name}</div>
+    <div class="tt-row"><span class="keydot kd-c"></span>Current: ${c ? c+" · "+PHASES[c-1] : "unrated"}</div>
+    <div class="tt-row"><span class="keydot kd-t"></span>Target: ${t ? t+" · "+PHASES[t-1] : "unrated"}</div>`;
+  tip.style.display = "block";
+  const wrap = document.getElementById("radarwrap").getBoundingClientRect();
+  let x = e.clientX - wrap.left + 14, y = e.clientY - wrap.top + 10;
+  if (x + 240 > wrap.width) x -= 260;
+  tip.style.left = x+"px"; tip.style.top = y+"px";
+}
+function hideTip(){ tip.style.display = "none"; }
+
+/* ---------- scores & gaps ---------- */
+function avg(arr){ const v = arr.filter(x=>x>0); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; }
+function phaseFor(a){
+  if(a==null) return "—";
+  if(a<1.8) return PHASES[0];
+  if(a<2.6) return PHASES[1];
+  if(a<3.5) return PHASES[2];
+  if(a<4.3) return PHASES[3];
+  return PHASES[4];
+}
+function renderScores(){
+  const ca = avg(state.current), ta = avg(state.target);
+  const rated = state.current.filter(x=>x>0).length;
+  document.getElementById("curAvg").textContent = ca ? ca.toFixed(1) : "—";
+  document.getElementById("curRated").textContent = rated ? rated + " of 10 rated" : "unrated";
+  document.getElementById("tgtAvg").textContent = ta ? ta.toFixed(1) : "—";
+  document.getElementById("gapAvg").textContent = (ca && ta) ? "+" + (ta-ca).toFixed(1) : "—";
+  document.getElementById("phase").textContent = phaseFor(ca);
+
+  const gaps = DIMS.map((d,i)=>({ d, i, c: state.current[i], t: state.target[i], gap: (state.target[i]||0)-(state.current[i]||0) }))
+    .filter(g=>g.c>0 && g.t>0).sort((a,b)=>b.gap-a.gap);
+  document.getElementById("gapList").innerHTML = gaps.length ? gaps.slice(0,10).map(g=>`
+    <div class="gap-row">
+      <span class="g-name">${g.d.name}</span>
+      <span class="g-meter"><span class="g-fill" style="width:${g.c/5*100}%"></span><span class="g-tgt" style="left:${g.t/5*100}%"></span></span>
+      <span class="g-val">${g.c} → ${g.t} (${g.gap>0?"+":""}${g.gap})</span>
+    </div>`).join("")
+    : `<div class="hint">Rate <b style="color:var(--series-c)">Now</b> and <b style="color:var(--lime)">Target</b> on each dimension to see the gap ranking.</div>`;
+
+  DIMS.forEach((d,i)=>{
+    document.getElementById(`st-c-${i}`).textContent = state.current[i] || "—";
+    document.getElementById(`st-t-${i}`).textContent = state.target[i] || "—";
+  });
+  assess.querySelectorAll(".radio").forEach(r=>{
+    const {kind,i,l} = r.dataset;
+    r.classList.toggle("sel-c", kind==="current" && state.current[+i]===+l);
+    r.classList.toggle("sel-t", kind==="target" && state.target[+i]===+l);
+  });
+}
+
+function render(){ renderSeries(); renderScores(); }
+
+/* ---------- controls ---------- */
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  state = { current: Array(10).fill(0), target: Array(10).fill(0) };
+  render();
+});
+let allOpen = false;
+document.getElementById("expandBtn").addEventListener("click", (e)=>{
+  allOpen = !allOpen;
+  assess.querySelectorAll(".dim-card").forEach(c=> c.classList.toggle("open", allOpen));
+  e.target.textContent = allOpen ? "Collapse all" : "Expand all";
+});
+document.getElementById("printBtn").addEventListener("click", ()=> window.print());
+window.addEventListener("beforeprint", ()=>{
+  const d = new Date();
+  document.getElementById("printDate").textContent = "Snapshot · " + d.toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+  const rows = DIMS.map((dm,i)=>{
+    const c=state.current[i], t=state.target[i];
+    const gap=(c&&t)?(t-c):null;
+    return `<tr><td>${dm.name}</td>`+
+      `<td class="n">${c? c+" · "+PHASES[c-1] : "—"}</td>`+
+      `<td class="t">${t? t+" · "+PHASES[t-1] : "—"}</td>`+
+      `<td class="g">${gap!=null? (gap>0?"+":"")+gap : "—"}</td></tr>`;
+  }).join("");
+  document.getElementById("printDims").innerHTML =
+    `<h2>By dimension</h2><table class="pd"><thead><tr><th>Dimension</th><th class="n">Now</th><th class="t">Target</th><th class="g">Gap</th></tr></thead><tbody>${rows}</tbody></table>`;
+});
+
+/* ---------- init ---------- */
+buildAssess();
+drawRadar();
+render();
+</script>
+</body>
+</html>
