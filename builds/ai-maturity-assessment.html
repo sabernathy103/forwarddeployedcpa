@@ -100,19 +100,24 @@
   #curAvg,#tgtAvg { color:var(--paper); }
   #gapAvg { color:var(--lime); }
 
-  /* dimension cards */
+  /* dimension cards — yellow banner, black body */
   .dim-card { background:var(--card); border:1px solid var(--line); border-radius:12px; margin-bottom:12px; overflow:hidden; }
-  .dim-head { display:flex; align-items:center; gap:12px; padding:12px 16px; cursor:pointer; user-select:none; background:rgba(255,255,255,.015); transition:background .15s; }
-  .dim-head:hover { background:rgba(124,58,237,.1); }
+  .dim-head { display:flex; align-items:center; gap:12px; padding:12px 16px; cursor:pointer; user-select:none; background:var(--lime); color:var(--ink); transition:filter .15s; }
+  .dim-head:hover { filter:brightness(.94); }
   .dim-num { width:24px; height:24px; border-radius:7px; background:var(--grape); color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--f-mono); font-size:12px; font-weight:500; flex-shrink:0; }
-  .dim-title { font-weight:700; font-size:15px; }
-  .dim-sub { color:var(--mute); font-size:12px; }
+  .dim-title { font-weight:700; font-size:15px; color:var(--ink); }
+  .dim-sub { color:rgba(17,16,20,.62); font-size:12px; }
   .dim-status { margin-left:auto; display:flex; gap:12px; align-items:center; font-family:var(--f-mono); font-size:12.5px; flex-shrink:0; }
-  .pill { display:inline-flex; align-items:center; gap:5px; color:var(--paper); }
+  .dim-head .pill { display:inline-flex; align-items:center; gap:5px; color:var(--ink); }
   .keydot { width:9px; height:9px; border-radius:50%; display:inline-block; flex-shrink:0; }
   .kd-c { background:var(--series-c); } .kd-t { background:var(--series-t); }
-  .chev { color:var(--mute-dim); font-size:11px; transition:transform .15s; }
+  .dim-head .kd-c { background:var(--grape); }
+  .dim-head .kd-t { border:2px solid var(--grape); width:8px; height:8px; }
+  .dim-head .chev { color:var(--grape); font-size:11px; transition:transform .15s; }
   .dim-card.open .chev { transform:rotate(90deg); }
+  .expand-hint { font-family:var(--f-mono); font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:.05em;
+    background:var(--grape); color:#fff; border-radius:6px; padding:4px 9px; flex-shrink:0; }
+  .dim-card.open .expand-hint { display:none; }
   .dim-body { display:none; }
   .dim-card.open .dim-body { display:block; }
 
@@ -246,7 +251,7 @@
 
 <div class="intro">
   <span class="eyebrow">self-assessment</span>
-  <p>For each of the ten dimensions, mark <b style="color:var(--series-c)">where your finance team is now</b> and <b style="color:var(--lime)">where you want to be</b>. The radar, scorecard, and gap ranking update live as you go.</p>
+  <p>Complete this Finance AI Maturity Assessment for your company confidentially and download the results as a PDF. For each of the ten dimensions, mark <b style="color:var(--series-c)">where your finance team is now</b> and <b style="color:var(--lime)">where you want to be</b>. The radar, scorecard, and gap ranking update live as you go.</p>
   <p class="reset-note">❯ Nothing is saved or sent anywhere — it runs entirely in your browser and resets every time you open or refresh the page.</p>
 </div>
 
@@ -312,6 +317,7 @@
   </div>
 </footer>
 
+<script src="../assets/js/jspdf.umd.min.js"></script>
 <script>
 const PHASES = ["Exploring","Experimenting","Adopting","Scaling","Transforming"];
 
@@ -386,11 +392,12 @@ function buildAssess(){
   assess.innerHTML = "";
   DIMS.forEach((d,i)=>{
     const card = document.createElement("div");
-    card.className = "dim-card" + (i===0 ? " open" : "");
+    card.className = "dim-card";
     card.innerHTML = `
       <div class="dim-head" data-i="${i}">
         <span class="dim-num">${i+1}</span>
         <span><span class="dim-title">${d.name}</span><br><span class="dim-sub">${d.sub}</span></span>
+        ${i===0 ? `<span class="expand-hint">Click Here to Expand and Complete</span>` : ""}
         <span class="dim-status">
           <span class="pill"><span class="keydot kd-c"></span><span id="st-c-${i}">—</span></span>
           <span class="pill"><span class="keydot kd-t"></span><span id="st-t-${i}">—</span></span>
@@ -536,7 +543,196 @@ document.getElementById("expandBtn").addEventListener("click", (e)=>{
   assess.querySelectorAll(".dim-card").forEach(c=> c.classList.toggle("open", allOpen));
   e.target.textContent = allOpen ? "Collapse all" : "Expand all";
 });
-document.getElementById("printBtn").addEventListener("click", ()=> window.print());
+/* ---------- instant branded PDF (jsPDF, one page per dimension) ---------- */
+const PC = {
+  grape:[109,40,217], dark:[76,29,149], lilac:[188,160,245], wash:[242,238,255],
+  lime:[215,255,0], ink:[21,18,33], gray:[107,101,119], line:[226,220,242]
+};
+const PW = 612, PH = 792, MARG = 40;
+
+function poly(doc, pts, style){
+  const segs = [];
+  for (let k=1; k<pts.length; k++) segs.push([pts[k][0]-pts[k-1][0], pts[k][1]-pts[k-1][1]]);
+  doc.lines(segs, pts[0][0], pts[0][1], [1,1], style, true);
+}
+function pdfBand(doc, title, sub, chipText){
+  doc.setFillColor(...PC.grape); doc.rect(0,0,PW,84,"F");
+  doc.setFillColor(...PC.lime);  doc.rect(0,84,PW,5,"F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(16); doc.setTextColor(255,255,255);
+  doc.text(title, MARG, 40);
+  if (sub){ doc.setFont("courier","normal"); doc.setFontSize(9); doc.setTextColor(...PC.lilac); doc.text(sub, MARG, 58); }
+  doc.setFont("helvetica","bold"); doc.setFontSize(10);
+  doc.setTextColor(255,255,255); doc.text("FORWARD DEPLOYED", PW-MARG-31, 30, {align:"right"});
+  doc.setTextColor(...PC.lime);  doc.text("CPA", PW-MARG, 30, {align:"right"});
+  if (chipText){ // yellow chip on the purple band
+    const w = doc.getTextWidth(chipText) + 20;
+    doc.setFillColor(...PC.lime); doc.setDrawColor(...PC.dark); doc.setLineWidth(1);
+    doc.roundedRect(PW-MARG-w, 44, w, 22, 6, 6, "FD");
+    doc.setTextColor(...PC.dark); doc.setFontSize(10.5);
+    doc.text(chipText, PW-MARG-w/2, 59, {align:"center"});
+  }
+}
+function pdfFooter(doc, pageNo, total){
+  doc.setFont("courier","normal"); doc.setFontSize(8); doc.setTextColor(...PC.gray);
+  doc.text("Forward Deployed CPA  ·  www.forwarddeployed.cpa  ·  confidential self-assessment — nothing was stored or transmitted", MARG, PH-24);
+  doc.setTextColor(...PC.grape); doc.setFont("helvetica","bold");
+  doc.text(pageNo + " / " + total, PW-MARG, PH-24, {align:"right"});
+}
+function pdfRadar(doc, cx, cy, R){
+  const c = state.current, t = state.target;
+  const P = (i,v)=>[cx+Math.cos(angle(i))*R*v/MAX, cy+Math.sin(angle(i))*R*v/MAX];
+  doc.setLineWidth(0.7); doc.setDrawColor(150,116,232);
+  for (let v=1; v<=MAX; v++) poly(doc, DIMS.map((_,i)=>P(i,v)), "S");
+  DIMS.forEach((_,i)=>{ const [x,y]=P(i,MAX); doc.line(cx,cy,x,y); });
+  DIMS.forEach((d,i)=>{
+    const a = angle(i), lx = cx+Math.cos(a)*(R+14), ly = cy+Math.sin(a)*(R+14);
+    const al = Math.abs(Math.cos(a))<0.25 ? "center" : (Math.cos(a)>0 ? "left" : "right");
+    const dy = Math.sin(a)>0.6 ? 9 : (Math.sin(a)<-0.6 ? -4 : 3);
+    doc.setFont("helvetica","bold"); doc.setFontSize(8.5); doc.setTextColor(255,255,255);
+    doc.text(d.short, lx, ly+dy, {align:al});
+    doc.setFont("courier","normal"); doc.setFontSize(7.5); doc.setTextColor(...PC.lilac);
+    doc.text((c[i]||"-") + " › " + (t[i]||"-"), lx, ly+dy+10, {align:al});
+  });
+  const series = (arr, rgb)=>{
+    if (!arr.some(v=>v>0)) return;
+    const pts = arr.map((v,i)=>P(i,v));
+    doc.saveGraphicsState(); doc.setGState(new doc.GState({opacity:0.22}));
+    doc.setFillColor(...rgb); poly(doc, pts, "F");
+    doc.restoreGraphicsState();
+    doc.setDrawColor(...rgb); doc.setLineWidth(2); poly(doc, pts, "S");
+    arr.forEach((v,i)=>{ if(!v) return; const [x,y]=P(i,v);
+      doc.setFillColor(...rgb); doc.setDrawColor(...PC.dark); doc.setLineWidth(1.2); doc.circle(x,y,3.4,"FD"); });
+  };
+  series(t, PC.lime);
+  series(c, [255,255,255]);
+}
+function generatePDF(){
+  if (!window.jspdf){ window.print(); return; }   // fallback only if the library failed to load
+  const doc = new window.jspdf.jsPDF({unit:"pt", format:"letter"});
+  const total = 2 + DIMS.length;
+  const today = new Date().toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+  const ca = avg(state.current), ta = avg(state.target);
+  const fmt = v => v==null ? "-" : (Math.round(v*10)/10).toFixed(1);
+
+  /* ---- page 1 · cover: scorecard + radar ---- */
+  pdfBand(doc, "FINANCE AI MATURITY ASSESSMENT", "Snapshot · " + today, null);
+  const tiles = [
+    {lab:"CURRENT AVG", val:fmt(ca), note:(state.current.filter(x=>x>0).length||0)+" of 10 rated"},
+    {lab:"TARGET AVG",  val:fmt(ta), note:""},
+    {lab:"GAP",         val:(ca&&ta)?"+"+fmt(ta-ca):"-", note:"target - current", lime:true},
+    {lab:"PHASE",       val:phaseFor(ca), note:"", small:true}
+  ];
+  const tw = (PW-2*MARG-3*12)/4;
+  tiles.forEach((tl,i)=>{
+    const x = MARG + i*(tw+12), y = 110;
+    doc.setDrawColor(...PC.grape); doc.setLineWidth(1.5);
+    if (tl.lime) doc.setFillColor(...PC.lime); else doc.setFillColor(255,255,255);
+    doc.roundedRect(x, y, tw, 64, 8, 8, "FD");
+    doc.setFont("courier","normal"); doc.setFontSize(7.5); doc.setTextColor(...PC.gray);
+    doc.text(tl.lab, x+11, y+16);
+    doc.setFont("helvetica","bold"); doc.setFontSize(tl.small?13:22);
+    doc.setTextColor(...(tl.lime?PC.ink:PC.grape));
+    doc.text(String(tl.val), x+11, y+(tl.small?42:44));
+    if (tl.note){ doc.setFont("courier","normal"); doc.setFontSize(7); doc.setTextColor(...PC.gray); doc.text(tl.note, x+11, y+56); }
+  });
+  doc.setFillColor(...PC.grape); doc.setDrawColor(...PC.dark); doc.setLineWidth(1);
+  doc.roundedRect(MARG, 192, PW-2*MARG, 528, 12, 12, "F");
+  doc.setFont("courier","normal"); doc.setFontSize(9); doc.setTextColor(...PC.lilac);
+  doc.text("// MATURITY RADAR", MARG+18, 214);
+  doc.setFillColor(255,255,255); doc.circle(MARG+24, 232, 4, "F");
+  doc.setTextColor(255,255,255); doc.text("Current", MARG+34, 235);
+  doc.setFillColor(...PC.lime); doc.circle(MARG+96, 232, 4, "F");
+  doc.setTextColor(...PC.lime); doc.text("Target", MARG+106, 235);
+  pdfRadar(doc, PW/2, 480, 170);
+  pdfFooter(doc, 1, total);
+
+  /* ---- page 2 · summary & gaps ---- */
+  doc.addPage();
+  pdfBand(doc, "SUMMARY · BY DIMENSION", "Now vs. target on the five-phase scale", null);
+  let y = 122;
+  doc.setFont("courier","normal"); doc.setFontSize(7.5); doc.setTextColor(...PC.gray);
+  doc.text("DIMENSION", MARG, y); doc.text("PROGRESS", 258, y);
+  doc.text("NOW", 434, y); doc.text("TARGET", 480, y); doc.text("GAP", 546, y);
+  y += 10;
+  DIMS.forEach((d,i)=>{
+    const c = state.current[i], t = state.target[i];
+    doc.setDrawColor(...PC.line); doc.setLineWidth(0.6); doc.line(MARG, y, PW-MARG, y);
+    doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(...PC.ink);
+    doc.text(d.name, MARG, y+20);
+    const mx = 258, mw = 156;
+    doc.setFillColor(...PC.wash); doc.setDrawColor(...PC.grape); doc.setLineWidth(0.8);
+    doc.roundedRect(mx, y+11, mw, 10, 5, 5, "FD");
+    if (c){ doc.setFillColor(...PC.grape); doc.roundedRect(mx, y+11, Math.max(10, mw*c/5), 10, 5, 5, "F"); }
+    if (t){ doc.setFillColor(...PC.ink); doc.rect(mx + mw*t/5 - 1.5, y+8, 3, 16, "F"); }
+    doc.setFont("helvetica","bold"); doc.setFontSize(10);
+    doc.setTextColor(...PC.grape); doc.text(c ? String(c) : "-", 440, y+20);
+    doc.setTextColor(...PC.ink);   doc.text(t ? String(t) : "-", 493, y+20);
+    const gap = (c&&t) ? t-c : null;
+    if (gap!=null){
+      doc.setFillColor(...PC.lime); doc.setDrawColor(...PC.grape); doc.setLineWidth(1.2);
+      doc.roundedRect(540, y+7, 34, 18, 5, 5, "FD");
+      doc.setTextColor(...PC.dark); doc.text((gap>0?"+":"")+gap, 557, y+20, {align:"center"});
+    } else { doc.setTextColor(...PC.gray); doc.text("-", 557, y+20, {align:"center"}); }
+    y += 34;
+  });
+  doc.setDrawColor(...PC.line); doc.line(MARG, y, PW-MARG, y);
+  doc.setFillColor(...PC.grape); doc.roundedRect(MARG, y+16, PW-2*MARG, 44, 8, 8, "F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(255,255,255);
+  doc.text("Overall phase: " + phaseFor(ca), MARG+16, y+43);
+  doc.setFont("courier","normal"); doc.setFontSize(9.5); doc.setTextColor(...PC.lime);
+  doc.text("current " + fmt(ca) + "  ·  target " + fmt(ta) + "  ·  gap " + ((ca&&ta)?"+"+fmt(ta-ca):"-"), PW-MARG-16, y+43, {align:"right"});
+  pdfFooter(doc, 2, total);
+
+  /* ---- pages 3+ · one page per dimension ---- */
+  DIMS.forEach((d,i)=>{
+    doc.addPage();
+    const c = state.current[i], t = state.target[i];
+    const chip = "NOW " + (c||"-") + "  ›  TARGET " + (t||"-");
+    pdfBand(doc, String(i+1).padStart(2,"0") + " · " + d.name.toUpperCase(), d.sub, chip);
+    let yy = 112;
+    d.levels.forEach((desc,li)=>{
+      const L = li+1, isC = c===L, isT = t===L;
+      const lines = doc.splitTextToSize(desc, PW-2*MARG-96);
+      const bh = 34 + lines.length*11;
+      if (isC || isT){
+        doc.setFillColor(...PC.wash); doc.setDrawColor(...PC.grape); doc.setLineWidth(1.4);
+      } else {
+        doc.setFillColor(255,255,255); doc.setDrawColor(...PC.line); doc.setLineWidth(0.8);
+      }
+      doc.roundedRect(MARG, yy, PW-2*MARG, bh, 8, 8, "FD");
+      if (isC || isT){ doc.setFillColor(...(isT && !isC ? PC.lime : PC.grape)); doc.rect(MARG, yy+6, 4, bh-12, "F"); }
+      doc.setFillColor(...PC.grape); doc.roundedRect(MARG+14, yy+10, 20, 20, 5, 5, "F");
+      doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(255,255,255);
+      doc.text(String(L), MARG+24, yy+24, {align:"center"});
+      doc.setTextColor(...PC.ink); doc.setFontSize(11);
+      doc.text(PHASES[li], MARG+44, yy+24);
+      let chipX = MARG+44 + doc.getTextWidth(PHASES[li]) + 10;
+      if (isC){
+        doc.setFillColor(...PC.grape); doc.roundedRect(chipX, yy+11, 40, 16, 4, 4, "F");
+        doc.setFontSize(8); doc.setTextColor(255,255,255); doc.text("NOW", chipX+20, yy+22, {align:"center"});
+        chipX += 48;
+      }
+      if (isT){
+        doc.setFillColor(...PC.lime); doc.setDrawColor(...PC.grape); doc.setLineWidth(1);
+        doc.roundedRect(chipX, yy+11, 54, 16, 4, 4, "FD");
+        doc.setFontSize(8); doc.setTextColor(...PC.dark); doc.text("TARGET", chipX+27, yy+22, {align:"center"});
+      }
+      doc.setFont("helvetica","normal"); doc.setFontSize(9); doc.setTextColor(...PC.gray);
+      doc.text(lines, MARG+44, yy+40);
+      yy += bh + 10;
+    });
+    const gap = (c&&t) ? t-c : null;
+    doc.setFont("courier","normal"); doc.setFontSize(9); doc.setTextColor(...PC.grape);
+    doc.text(gap!=null
+      ? "Response: now " + c + " (" + PHASES[c-1] + ")  ·  target " + t + " (" + PHASES[t-1] + ")  ·  gap " + (gap>0?"+":"") + gap
+      : "Response: not yet rated on this dimension.", MARG, yy+8);
+    pdfFooter(doc, 3+i, total);
+  });
+
+  const dstr = new Date().toISOString().slice(0,10);
+  doc.save("Finance-AI-Maturity-Assessment-" + dstr + ".pdf");
+}
+document.getElementById("printBtn").addEventListener("click", generatePDF);
 window.addEventListener("beforeprint", ()=>{
   const d = new Date();
   document.getElementById("printDate").textContent = "Snapshot · " + d.toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
