@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://forwarddeployedcpa.com/sitemap.xml
+Sitemap: https://www.forwarddeployed.cpa/sitemap.xml
