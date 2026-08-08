@@ -5,4 +5,6 @@
   <url><loc>https://www.forwarddeployed.cpa/builds/platform-architecture.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.forwarddeployed.cpa/builds/ai-maturity-assessment.html</loc><priority>0.8</priority></url>
   <url><loc>https://www.forwarddeployed.cpa/builds/cash-flow-13-week.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.forwarddeployed.cpa/work-with-me.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.forwarddeployed.cpa/builds/smb-stack.html</loc><priority>0.8</priority></url>
 </urlset>

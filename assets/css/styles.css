@@ -122,6 +122,8 @@ strong { color: #fff; font-weight: 700; }
 .btn--ghost:hover { border-color: var(--lime); color: var(--lime); background: transparent; box-shadow: none; }
 .band-lime .btn--ghost { --_fg: var(--ink); border-color: rgba(15,10,28,.3); }
 .band-lime .btn--ghost:hover { border-color: var(--ink); color: var(--ink); }
+.btn--ink { --_bg: var(--ink); --_fg: #fff; }
+.btn--ink:hover { background: var(--ink-panel-2); box-shadow: 0 12px 30px -10px rgba(15,10,28,.55); }
 
 /* ---- header ------------------------------------------------------------ */
 .site-head {
