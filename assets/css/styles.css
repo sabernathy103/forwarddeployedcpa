@@ -124,6 +124,9 @@ strong { color: #fff; font-weight: 700; }
 .band-lime .btn--ghost:hover { border-color: var(--ink); color: var(--ink); }
 .btn--ink { --_bg: var(--ink); --_fg: #fff; }
 .btn--ink:hover { background: var(--ink-panel-2); box-shadow: 0 12px 30px -10px rgba(15,10,28,.55); }
+/* .band-lime a { color: ink } outspecifies .btn — restore white text for ink buttons on lime */
+.band-lime .btn--ink, .band-lime .btn--ink:hover { color: #fff; }
+.band-lime .btn--ink .__cf_email__ { color: #fff; }
 
 /* ---- path split (enterprise vs SMB) ------------------------------------ */
 .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
