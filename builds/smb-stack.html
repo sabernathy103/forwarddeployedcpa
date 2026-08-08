@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The SMB Finance Stack — Forward Deployed CPA</title>
-<meta name="description" content="The reference architecture for running a $5–30M company's finance stack as a fractional controller/CFO: Xero and Gusto as systems of record, transactions automated at the source, and AI-built dashboards on Cloudflare Pages secured by Cloudflare Access.">
+<meta name="description" content="The finance tech infrastructure for a $5–30M company: Xero and Gusto as systems of record, transactions automated at the source, AI-built dashboards on Cloudflare Pages secured by Cloudflare Access — owned by the company, managed by a fractional controller/CFO.">
 <link rel="canonical" href="https://www.forwarddeployed.cpa/builds/smb-stack.html">
 
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Forward Deployed CPA">
 <meta property="og:title" content="The SMB Finance Stack — reference architecture">
-<meta property="og:description" content="Automate the back. Dashboard the front. One repeatable stack a fractional controller/CFO runs for $5–30M companies.">
+<meta property="og:description" content="Automate the back. Dashboard the front. The finance tech infrastructure for $5–30M companies — company-owned, managed by a fractional controller/CFO.">
 <meta property="og:url" content="https://www.forwarddeployed.cpa/builds/smb-stack.html">
 <meta property="og:image" content="https://www.forwarddeployed.cpa/assets/img/og-banner.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -167,7 +167,7 @@
     <p class="mono"><a href="index.html" class="muted" style="text-decoration:none">❮ back to builds</a></p>
     <span class="eyebrow" style="margin-top:.8rem">builds · the smb platform</span>
     <h1 style="text-transform:none;letter-spacing:-.025em;margin-top:.7rem;"><span class="lime">Automate</span> the back.<br>Dashboard the <span class="lime">front.</span></h1>
-    <p class="lead">The reference architecture for running a $5–30M company's finance stack as a fractional controller/CFO — transactions automated at the source, leadership dashboards built with AI on top, and the client owning every account.</p>
+    <p class="lead">The tech infrastructure for a $5–30M company's finance function — transactions automated at the source, leadership dashboards built with AI on top. Your company owns every account; a fractional controller/CFO runs the whole thing for you.</p>
   </div>
 </section>
 
@@ -176,8 +176,8 @@
 
     <div class="arch reveal">
       <div class="arch__meta">
-        <span>// one client's stack — <strong>stamped out per client</strong></span>
-        <span>infra: <strong>$100–300 / client / mo</strong></span>
+        <span>// your company's stack — <strong>owned by you, managed for you</strong></span>
+        <span>infra: <strong>$100–300 / mo</strong></span>
       </div>
 
       <div class="band">
@@ -312,9 +312,9 @@
       <div class="flow"><span><b>▲</b> clean books out</span></div>
 
       <div class="band">
-        <span class="band__tag">// systems of record <small>client-owned subscriptions · you as advisor</small></span>
+        <span class="band__tag">// systems of record <small>company-owned subscriptions · controller as advisor</small></span>
         <div class="duo">
-          <div class="rec"><h4>Xero <span>·</span> GL</h4><p>general ledger, AP/AR, bank rec — the single ledger for every client</p></div>
+          <div class="rec"><h4>Xero <span>·</span> GL</h4><p>general ledger, AP/AR, bank rec — one ledger for the whole business</p></div>
           <div class="rec"><h4>Gusto <span>·</span> Payroll</h4><p>payroll, benefits, HR records — synced to Xero</p></div>
         </div>
       </div>
@@ -333,7 +333,7 @@
 
       <div class="identity">
         <span class="band__tag">// identity</span>
-        <p><strong>Cloudflare Access — one door, their keys.</strong> Every dashboard sits behind Access; clients sign in with the Google or Microsoft account they already have. Secure by architecture, not by policy memo.</p>
+        <p><strong>Cloudflare Access — one door, your keys.</strong> Every dashboard sits behind Access; your team signs in with the Google or Microsoft accounts they already have. Secure by architecture, not by policy memo.</p>
       </div>
     </div>
 
@@ -358,28 +358,28 @@
         <span class="layer__tag">// delivery</span>
         <div>
           <h3>Dashboards the leadership team actually runs on</h3>
-          <p>Custom static apps built with AI in HTML and Python, deployed to Cloudflare Pages in the client's own account. No BI license, no engineering backlog — and each person sees only what they're authorized to see.</p>
+          <p>Custom static apps built with AI in HTML and Python, deployed to Cloudflare Pages in your company's own account. No BI license, no engineering backlog — and each person sees only what they're authorized to see.</p>
         </div>
       </div>
       <div class="layer">
         <span class="layer__tag">// source of truth</span>
         <div>
           <h3>A modeled warehouse — every metric defined once</h3>
-          <p>A per-client BigQuery project with dbt models playing the role certified semantic models play in the enterprise stack. Every dashboard inherits the same numbers, and the warehouse ties out to the Xero trial balance daily — a reconciliation, not a hope.</p>
+          <p>Your company's own BigQuery project, with dbt models playing the role certified semantic models play in the enterprise stack. Every dashboard inherits the same numbers, and the warehouse ties out to the Xero trial balance daily — a reconciliation, not a hope.</p>
         </div>
       </div>
       <div class="layer">
         <span class="layer__tag">// pipeline</span>
         <div>
           <h3>Scheduled, reconciled extracts</h3>
-          <p>Nightly Python extractors on GitHub Actions pull Xero, Gusto, Ramp, and Stripe into the warehouse. Control totals are checked on every run; a broken feed pages the operator, not the client.</p>
+          <p>Nightly Python extractors on GitHub Actions pull Xero, Gusto, Ramp, and Stripe into the warehouse. Control totals are checked on every run; a broken feed pages your controller before anyone opens a stale dashboard.</p>
         </div>
       </div>
       <div class="layer">
         <span class="layer__tag">// systems of record</span>
         <div>
-          <h3>Xero and Gusto — one ledger, one payroll, every client</h3>
-          <p>The client owns the subscriptions; you connect as advisor. Standardizing on one ledger is what makes the whole stack repeatable — every bank rule, chart of accounts, and dashboard template transfers to the next client.</p>
+          <h3>Xero and Gusto — one ledger, one payroll</h3>
+          <p>Your company owns the subscriptions; your fractional controller/CFO connects as an advisor. A standard, proven pairing means nothing exotic to maintain — the bank rules, chart of accounts, and dashboard templates are battle-tested, not bespoke.</p>
         </div>
       </div>
       <div class="layer">
@@ -393,7 +393,7 @@
         <span class="layer__tag">// identity</span>
         <div>
           <h3>Cloudflare Access — one identity, end to end</h3>
-          <p>The SMB answer to Entra ID: an access layer you administer that accepts the Google Workspace or Microsoft 365 sign-in the client already uses. One place governs who sees what, across every tool you ship them.</p>
+          <p>The SMB answer to Entra ID: an access layer your controller administers that accepts the Google Workspace or Microsoft 365 sign-in your team already uses. One place governs who sees what, across every tool in the stack.</p>
         </div>
       </div>
     </div>
@@ -405,24 +405,24 @@
     <div class="sec-head reveal">
       <div>
         <span class="eyebrow">the operating model</span>
-        <h2 style="margin-top:.6rem;text-transform:none;letter-spacing:-.02em">Built to be repeated</h2>
+        <h2 style="margin-top:.6rem;text-transform:none;letter-spacing:-.02em">Your infrastructure. Managed for you.</h2>
       </div>
     </div>
     <div class="op-grid reveal">
       <div class="op">
         <span class="layer__tag">// ownership</span>
-        <h3>The client owns everything</h3>
-        <p>Xero, Gusto, Ramp, the Cloudflare account, the warehouse project — all in the client's name, billed to the client, with you as the administering advisor. Offboarding is a handover of admin rights, not a data migration.</p>
+        <h3>Your company owns everything</h3>
+        <p>Xero, Gusto, Ramp, the Cloudflare account, the warehouse project — all in your company's name, billed to you, with the fractional controller/CFO as the administering advisor. Change advisors someday? You hand over admin rights. Your data never moves.</p>
       </div>
       <div class="op">
         <span class="layer__tag">// isolation</span>
-        <h3>Stamped out per client</h3>
-        <p>No shared database, no client_id column. Each client gets an isolated copy of the stack from a common template. One client's data can never leak into another's dashboard — by architecture.</p>
+        <h3>A dedicated instance, isolated by design</h3>
+        <p>Your stack is a dedicated copy of a proven template — no shared database, no commingled data with any other business. Your numbers can never surface in someone else's dashboard, by architecture.</p>
       </div>
       <div class="op">
         <span class="layer__tag">// the lab</span>
-        <h3>Prototyped on sandboxes first</h3>
-        <p>The whole stack runs in a lab against the Xero Demo Company, Gusto's demo environment, Stripe test mode, and Ramp's sandbox — no certification required. Vendor reviews come later, only when real client data connects.</p>
+        <h3>Proven before it touches your books</h3>
+        <p>Every component runs in a lab against vendor sandboxes — the Xero Demo Company, Gusto's demo environment, Stripe test mode — before it ever connects to live company data. Changes are rehearsed there first, too.</p>
       </div>
     </div>
   </div>
