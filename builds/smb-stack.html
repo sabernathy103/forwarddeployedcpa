@@ -56,6 +56,53 @@
 .arch .card p { font-size: .76rem; color: var(--mute-dim); margin-top: .2rem; line-height: 1.45; }
 .arch .card--any { border-color: var(--lime-deep); }
 .arch .card--any h4 { color: var(--lime); }
+
+/* hover sample previews on the delivery cards */
+.arch .card--preview { position: relative; cursor: default; }
+.arch .card--preview:hover, .arch .card--preview:focus-visible { border-color: var(--lime-deep); }
+.card__pop {
+  position: absolute; top: calc(100% + 10px); left: 0; width: 380px; z-index: 30;
+  background: var(--ink); border: 2px solid var(--lime); border-radius: 10px;
+  box-shadow: 0 30px 60px -24px rgba(0,0,0,.9);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .16s var(--ease), visibility .16s;
+}
+.arch .cards > :nth-child(3n+2) .card__pop { left: 50%; transform: translateX(-50%); }
+.arch .cards > :nth-child(3n) .card__pop { left: auto; right: 0; }
+.arch .card--preview:hover .card__pop, .arch .card--preview:focus .card__pop { opacity: 1; visibility: visible; }
+.pop__head { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; padding: .55rem .75rem; border-bottom: 1px solid var(--line-soft); background: var(--ink-panel-2); border-radius: 8px 8px 0 0; }
+.pop__title { font-weight: 700; font-size: .78rem; color: #fff; }
+.pop__tag { font-family: var(--f-mono); font-size: .52rem; letter-spacing: .14em; text-transform: uppercase; color: var(--lime); white-space: nowrap; }
+.pop__body { padding: .65rem .75rem .75rem; display: grid; gap: .55rem; }
+.pop__note { font-family: var(--f-mono); font-size: .52rem; color: var(--mute-dim); letter-spacing: .08em; text-transform: uppercase; }
+.card__pop svg text { font-family: var(--f-mono); font-size: 6px; fill: var(--mute-dim); }
+.good { color: var(--lime); }
+.bad { color: #ff8fa3; }
+.stat-row { display: flex; gap: .5rem; }
+.pop-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; }
+.stat { flex: 1; background: var(--ink-panel); border: 1px solid var(--line-soft); border-radius: 6px; padding: .35rem .5rem; }
+.stat span { display: block; font-family: var(--f-mono); font-size: .5rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute-dim); white-space: nowrap; }
+.stat b { font-size: .8rem; color: #fff; }
+.stat b em { font-style: normal; font-size: .55rem; margin-left: .25em; }
+.pop-bars { display: grid; gap: .3rem; }
+.pbar { display: grid; grid-template-columns: 64px 1fr 44px; align-items: center; gap: .5rem; }
+.pbar--4 { grid-template-columns: 74px 1fr 42px 30px; }
+.pbar .lbl { font-family: var(--f-mono); font-size: .55rem; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pbar .trk { height: 7px; background: var(--ink-panel); border: 1px solid var(--line-soft); border-radius: 4px; overflow: hidden; }
+.pbar .fil { height: 100%; background: var(--lime); border-radius: 4px; }
+.pbar .fil--dim { background: rgba(255,255,255,.28); }
+.pbar .val { font-family: var(--f-mono); font-size: .55rem; color: var(--paper-dim); text-align: right; }
+.pop-tbl { display: grid; }
+.pop-tbl .r { display: grid; grid-template-columns: 1fr 56px 56px 46px; gap: .4rem; padding: .24rem 0; border-bottom: 1px solid var(--line-soft); align-items: baseline; }
+.pop-tbl .r:last-child { border-bottom: 0; }
+.pop-tbl--ar .r { grid-template-columns: 1fr 52px 34px 44px; }
+.pop-tbl .h { font-family: var(--f-mono); font-size: .5rem; text-transform: uppercase; letter-spacing: .1em; color: var(--mute-dim); }
+.pop-tbl .lab { font-size: .62rem; color: var(--mute); }
+.pop-tbl .num { font-family: var(--f-mono); font-size: .58rem; text-align: right; color: var(--paper-dim); }
+.pop-tbl .tot .lab, .pop-tbl .tot .num { color: #fff; font-weight: 700; }
+.mchip { font-family: var(--f-mono); font-size: .48rem; text-transform: uppercase; letter-spacing: .08em; border: 1px solid var(--lime-deep); color: var(--lime); border-radius: 999px; padding: .12em .5em; justify-self: end; }
+.mchip--dim { border-color: var(--line); color: var(--mute-dim); }
+@media (max-width: 640px), (hover: none) { .card__pop { display: none; } }
 .hub {
   background: var(--ink-panel); border: 1px solid var(--line); border-radius: var(--radius-sm);
   padding: .9rem 1.1rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1rem;
@@ -134,13 +181,108 @@
       </div>
 
       <div class="band">
-        <span class="band__tag">// delivery <small>AI-built static apps · Cloudflare Pages · client-owned</small></span>
+        <span class="band__tag">// delivery <small>AI-built static apps · Cloudflare Pages · hover a report for a sample</small></span>
         <div class="cards">
-          <div class="card"><h4>13-Week Cash Flow</h4><p>rolling forecast, drill-down to the transaction</p></div>
-          <div class="card"><h4>Leadership KPIs</h4><p>the numbers the exec team runs the week on</p></div>
-          <div class="card"><h4>AR Command Center</h4><p>who owes what, who to call today</p></div>
-          <div class="card"><h4>Customer Dashboard</h4><p>revenue, margin &amp; aging by customer</p></div>
-          <div class="card"><h4>Income Statement</h4><p>monthly P&amp;L vs budget, drillable to the entry</p></div>
+
+          <div class="card card--preview" tabindex="0">
+            <h4>13-Week Cash Flow</h4><p>rolling forecast, drill-down to the transaction</p>
+            <div class="card__pop" aria-hidden="true">
+              <div class="pop__head"><span class="pop__title">13-Week Cash Flow</span><span class="pop__tag">sample · synthetic</span></div>
+              <div class="pop__body">
+                <div class="stat-row">
+                  <div class="stat"><span>ending cash · wk 13</span><b>$1.24M <em class="good">▲ 18%</em></b></div>
+                  <div class="stat"><span>low point</span><b>$612K <em class="bad">wk 5</em></b></div>
+                </div>
+                <svg viewBox="0 0 344 112" fill="none" role="img">
+                  <line x1="4" y1="96" x2="340" y2="96" stroke="rgba(255,255,255,.16)"/>
+                  <g fill="rgba(255,255,255,.14)">
+                    <rect x="8" y="70" width="14" height="26" rx="2"/><rect x="34" y="58" width="14" height="38" rx="2"/><rect x="60" y="74" width="14" height="22" rx="2"/><rect x="86" y="52" width="14" height="44" rx="2"/><rect x="112" y="82" width="14" height="14" rx="2"/><rect x="138" y="66" width="14" height="30" rx="2"/><rect x="164" y="54" width="14" height="42" rx="2"/><rect x="190" y="68" width="14" height="28" rx="2"/><rect x="216" y="72" width="14" height="24" rx="2"/><rect x="242" y="56" width="14" height="40" rx="2"/><rect x="268" y="64" width="14" height="32" rx="2"/><rect x="294" y="48" width="14" height="48" rx="2"/><rect x="320" y="60" width="14" height="36" rx="2"/>
+                  </g>
+                  <polyline points="15,58 41,54 67,60 93,66 119,72 145,64 171,56 197,50 223,53 249,44 275,37 301,29 327,20" stroke="#D7FF00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="119" cy="72" r="3.5" stroke="#ff8fa3" stroke-width="1.5"/>
+                  <circle cx="327" cy="20" r="3" fill="#D7FF00"/>
+                  <text x="8" y="107">W1</text><text x="160" y="107">W7</text><text x="312" y="107">W13</text>
+                </svg>
+                <span class="pop__note">weekly net (bars) · cash balance (line)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card--preview" tabindex="0">
+            <h4>Leadership KPIs</h4><p>the numbers the exec team runs the week on</p>
+            <div class="card__pop" aria-hidden="true">
+              <div class="pop__head"><span class="pop__title">Leadership KPIs</span><span class="pop__tag">sample · synthetic</span></div>
+              <div class="pop__body">
+                <div class="pop-kpis">
+                  <div class="stat"><span>revenue mtd</span><b>$1.86M <em class="good">▲6%</em></b></div>
+                  <div class="stat"><span>gross margin</span><b>41.2% <em class="good">▲1.1</em></b></div>
+                  <div class="stat"><span>cash on hand</span><b>$2.41M</b></div>
+                  <div class="stat"><span>ar &gt; 30 days</span><b>$214K <em class="good">▼9%</em></b></div>
+                  <div class="stat"><span>ebitda mtd</span><b>$274K <em class="good">▲20%</em></b></div>
+                  <div class="stat"><span>headcount</span><b>84 <em>—</em></b></div>
+                </div>
+                <span class="pop__note">refreshed nightly from the warehouse</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card--preview" tabindex="0">
+            <h4>AR Command Center</h4><p>who owes what, who to call today</p>
+            <div class="card__pop" aria-hidden="true">
+              <div class="pop__head"><span class="pop__title">AR Command Center</span><span class="pop__tag">sample · synthetic</span></div>
+              <div class="pop__body">
+                <div class="pop-bars">
+                  <div class="pbar"><span class="lbl">current</span><span class="trk"><span class="fil fil--dim" style="width:100%"></span></span><span class="val">$412K</span></div>
+                  <div class="pbar"><span class="lbl">1–30 d</span><span class="trk"><span class="fil" style="width:45%"></span></span><span class="val">$186K</span></div>
+                  <div class="pbar"><span class="lbl">31–60 d</span><span class="trk"><span class="fil" style="width:23%"></span></span><span class="val">$94K</span></div>
+                  <div class="pbar"><span class="lbl">61–90 d</span><span class="trk"><span class="fil" style="width:9%"></span></span><span class="val">$38K</span></div>
+                  <div class="pbar"><span class="lbl">90+ d</span><span class="trk"><span class="fil" style="width:5%"></span></span><span class="val">$21K</span></div>
+                </div>
+                <div class="pop-tbl pop-tbl--ar">
+                  <div class="r"><span class="h">customer</span><span class="h num">open</span><span class="h num">days</span><span class="h" style="text-align:right">next</span></div>
+                  <div class="r"><span class="lab">Meridian Mfg</span><span class="num">$48.2K</span><span class="num bad">62</span><span class="mchip">call</span></div>
+                  <div class="r"><span class="lab">BlueRock Media</span><span class="num">$31.5K</span><span class="num bad">47</span><span class="mchip">call</span></div>
+                  <div class="r"><span class="lab">Acme Industrial</span><span class="num">$22.8K</span><span class="num">35</span><span class="mchip mchip--dim">email</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card--preview" tabindex="0">
+            <h4>Customer Dashboard</h4><p>revenue, margin &amp; aging by customer</p>
+            <div class="card__pop" aria-hidden="true">
+              <div class="pop__head"><span class="pop__title">Customer Dashboard</span><span class="pop__tag">sample · synthetic</span></div>
+              <div class="pop__body">
+                <div class="pop-bars">
+                  <div class="pbar pbar--4"><span class="lbl">Acme Industrial</span><span class="trk"><span class="fil" style="width:55%"></span></span><span class="val">$486K</span><span class="val good">44%</span></div>
+                  <div class="pbar pbar--4"><span class="lbl">Northside Co</span><span class="trk"><span class="fil" style="width:45%"></span></span><span class="val">$402K</span><span class="val">38%</span></div>
+                  <div class="pbar pbar--4"><span class="lbl">BlueRock Media</span><span class="trk"><span class="fil" style="width:35%"></span></span><span class="val">$311K</span><span class="val good">51%</span></div>
+                  <div class="pbar pbar--4"><span class="lbl">Meridian Mfg</span><span class="trk"><span class="fil" style="width:30%"></span></span><span class="val">$268K</span><span class="val bad">33%</span></div>
+                  <div class="pbar pbar--4"><span class="lbl">all others</span><span class="trk"><span class="fil fil--dim" style="width:100%"></span></span><span class="val">$890K</span><span class="val">41%</span></div>
+                </div>
+                <span class="pop__note">trailing 12 mo · revenue (bars) · gross margin %</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card--preview" tabindex="0">
+            <h4>Income Statement</h4><p>monthly P&amp;L vs budget, drillable to the entry</p>
+            <div class="card__pop" aria-hidden="true">
+              <div class="pop__head"><span class="pop__title">Income Statement</span><span class="pop__tag">sample · synthetic</span></div>
+              <div class="pop__body">
+                <div class="pop-tbl">
+                  <div class="r"><span class="h">$k · jul 2026</span><span class="h num">actual</span><span class="h num">budget</span><span class="h num">var</span></div>
+                  <div class="r"><span class="lab">Revenue</span><span class="num">1,860</span><span class="num">1,750</span><span class="num good">+6.3%</span></div>
+                  <div class="r"><span class="lab">COGS</span><span class="num">(1,094)</span><span class="num">(1,046)</span><span class="num bad">−4.6%</span></div>
+                  <div class="r tot"><span class="lab">Gross profit</span><span class="num">766</span><span class="num">704</span><span class="num good">+8.8%</span></div>
+                  <div class="r"><span class="lab">Opex</span><span class="num">(492)</span><span class="num">(476)</span><span class="num bad">−3.4%</span></div>
+                  <div class="r tot"><span class="lab">EBITDA</span><span class="num">274</span><span class="num">228</span><span class="num good">+20.2%</span></div>
+                </div>
+                <span class="pop__note">gross 41.2% · ebitda 14.7% · click-through disabled in sample</span>
+              </div>
+            </div>
+          </div>
+
           <div class="card card--any"><h4>Any Report You Want</h4><p>if it's in the warehouse, it's a dashboard</p></div>
         </div>
       </div>
