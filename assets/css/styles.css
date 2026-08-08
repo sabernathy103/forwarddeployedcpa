@@ -125,6 +125,17 @@ strong { color: #fff; font-weight: 700; }
 .btn--ink { --_bg: var(--ink); --_fg: #fff; }
 .btn--ink:hover { background: var(--ink-panel-2); box-shadow: 0 12px 30px -10px rgba(15,10,28,.55); }
 
+/* ---- credential grid (bio) --------------------------------------------- */
+.cred-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin-top: 1.7rem; max-width: 560px; }
+.cred {
+  font-family: var(--f-mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--paper-dim); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: .6rem .85rem; background: rgba(0,0,0,.16);
+}
+.cred--hi { grid-column: 1 / -1; border-color: var(--lime-deep); color: #fff; }
+.cred--hi b { color: var(--lime); font-weight: 500; }
+@media (max-width: 480px) { .cred-grid { grid-template-columns: 1fr; } }
+
 /* ---- header ------------------------------------------------------------ */
 .site-head {
   position: sticky; top: 0; z-index: 50;
