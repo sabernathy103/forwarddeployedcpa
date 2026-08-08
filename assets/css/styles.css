@@ -125,6 +125,37 @@ strong { color: #fff; font-weight: 700; }
 .btn--ink { --_bg: var(--ink); --_fg: #fff; }
 .btn--ink:hover { background: var(--ink-panel-2); box-shadow: 0 12px 30px -10px rgba(15,10,28,.55); }
 
+/* ---- path split (enterprise vs SMB) ------------------------------------ */
+.paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.path {
+  display: flex; flex-direction: column;
+  background: var(--ink-panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.9rem 1.8rem 1.7rem;
+  transition: border-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.path:hover { border-color: var(--lime); transform: translateY(-5px); box-shadow: 0 24px 50px -30px rgba(0,0,0,.8); }
+.path__tag { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--lime); }
+.path h3 { text-transform: none; letter-spacing: -.015em; font-size: clamp(1.5rem, 2.6vw, 2rem); color: #fff; margin: .7rem 0 .6rem; }
+.path p { font-size: .98rem; color: var(--mute); flex: 1; }
+.path__go { font-family: var(--f-mono); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: #fff; margin-top: 1.3rem; display: inline-flex; align-items: center; gap: .5em; }
+.path:hover .path__go { color: var(--lime); }
+.path:hover .path__go .arw { transform: translateX(4px); }
+.path__go .arw { transition: transform .18s var(--ease); }
+@media (max-width: 840px) { .paths { grid-template-columns: 1fr; } }
+
+/* ---- receipts (credentials + outcomes on lime) ------------------------- */
+.receipts { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 3vw, 2.6rem); margin-top: 1.8rem; }
+.receipt__num {
+  display: block; font-family: var(--f-head); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(2.3rem, 4.6vw, 3.6rem); line-height: .95; letter-spacing: -.02em; color: var(--ink);
+}
+.receipt__num .g { color: var(--grape); }
+.receipt__label {
+  display: block; margin-top: .7rem; font-family: var(--f-mono); font-size: .74rem;
+  letter-spacing: .05em; text-transform: uppercase; line-height: 1.6; color: rgba(15,10,28,.72);
+}
+@media (max-width: 720px) { .receipts { grid-template-columns: 1fr; } }
+
 /* ---- credential grid (bio) --------------------------------------------- */
 .cred-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin-top: 1.7rem; max-width: 560px; }
 .cred {
