@@ -329,3 +329,25 @@ strong { color: #fff; font-weight: 700; }
 .skip:focus { left: 8px; top: 8px; }
 :focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; border-radius: 4px; }
 .divider { height: 1px; background: var(--line); border: none; }
+
+/* ---------- headline build (Control Center) ---------- */
+.build--feature { grid-column: 1 / -1; display: grid; grid-template-columns: 1.15fr 1fr; }
+.build--feature .build__top { height: auto; min-height: 260px; border-bottom: 0; border-right: 1px solid var(--line); background: var(--ink); padding: 0; place-items: stretch; }
+.build--feature .build__top img { width: 100%; height: 100%; object-fit: cover; object-position: left top; display: block; }
+.build--feature .build__body { padding: 2rem; }
+.build--feature .build__body h3 { font-size: 1.7rem; }
+.build__flag { display: inline-block; font-family: var(--f-mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); background: var(--lime); border-radius: 4px; padding: .2em .55em; margin-left: .6em; vertical-align: middle; }
+@media (max-width: 900px) { .build--feature { grid-template-columns: 1fr; } .build--feature .build__top { min-height: 200px; border-right: 0; border-bottom: 1px solid var(--line); } }
+.cc-shot { border: 3px solid var(--lime); border-radius: var(--radius); overflow: hidden; background: var(--ink); box-shadow: 0 40px 90px -50px rgba(0,0,0,.9); }
+.cc-shot img { width: 100%; display: block; }
+.cc-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-top: 2rem; }
+.cc-stat { background: var(--ink-panel); padding: 1.1rem 1.2rem; }
+.cc-stat b { display: block; font-family: var(--f-mono); font-size: 1.45rem; color: #fff; font-weight: 500; }
+.cc-stat span { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); }
+@media (max-width: 900px) { .cc-stats { grid-template-columns: repeat(2, 1fr); } }
+.cc-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+@media (max-width: 900px) { .cc-gallery { grid-template-columns: 1fr; } }
+.cc-gallery figure { margin: 0; background: var(--ink-panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.cc-gallery img { width: 100%; display: block; border-bottom: 1px solid var(--line); }
+.cc-gallery figcaption { padding: 1rem 1.1rem; font-size: .92rem; color: var(--mute); }
+.cc-gallery figcaption b { display: block; color: #fff; font-weight: 700; margin-bottom: .2rem; }

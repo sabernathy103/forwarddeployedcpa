@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects
+/builds/cash-flow-13-week.html  /builds/control-center  301
+/builds/cash-flow-13-week       /builds/control-center  301

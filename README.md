@@ -28,7 +28,7 @@ Everything centers on `/builds/` — real, interactive artifacts, each a self-co
 2. **Finance AI Maturity Assessment** — `builds/ai-maturity-assessment.html`
    Interactive 10-dimension self-assessment with a live radar. **Blank on every open**, nothing
    stored, resets on refresh. De-identified from an earlier client build — generic model only.
-3. **13-Week Cash Flow Forecast** — `builds/cash-flow-13-week.html`
+3. **Control Center** (headline build) — `builds/control-center.html`, links to the live app at meridianrpts.forwarddeployed.cpa
    Direct-method rolling forecast on synthetic data with drill-down. Rebranded to Forward
    Deployed CPA (dark theme, `❯..` glyph, grape/lime).
 
@@ -77,7 +77,7 @@ website/
 │   ├── index.html                 # the Builds showcase
 │   ├── platform-architecture.html # #1 architecture
 │   ├── ai-maturity-assessment.html# #2 interactive tool
-│   └── cash-flow-13-week.html     # #3 interactive dashboard
+│   └── control-center.html        # #3 headline build (live ERP-backed app)
 └── assets/
     ├── css/styles.css             # the whole design system
     ├── js/main.js                 # nav, scroll-reveal, typed hero, signup
